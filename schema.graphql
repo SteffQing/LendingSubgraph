@@ -133,7 +133,7 @@ type account @entity {
 
   collectionoffers: [CollectionOffers!] @derivedFrom(field: "creator")
 
-  outgoingtokencollectionoffers: [CollectionsTokenOffers!]
+  outgoingTokenCollectionOffers: [CollectionsTokenOffers!]
     @derivedFrom(field: "creator")
 }
 
@@ -213,21 +213,6 @@ type token @entity {
 
   saleInfo: SaleInfo @derivedFrom(field: "tokenId")
 }
-
-type _Schema_
-  @fulltext(
-    name: "marketSearch"
-    language: en
-    algorithm: rank
-    include: [
-      { entity: "token", fields: [{ name: "identifier" }] }
-      {
-        entity: "collection"
-        fields: [{ name: "id" }, { name: "name" }, { name: "symbol" }]
-      }
-      { entity: "account", fields: [{ name: "id" }] }
-    ]
-  )
 
 type accountCollection @entity {
   " Account Id - Collection Id "

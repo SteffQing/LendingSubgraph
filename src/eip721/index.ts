@@ -23,15 +23,11 @@ export function handleTransfer(event: TransferEvent): void {
     let senderAddress = account.load(event.params.from.toHexString());
     if (!senderAddress) {
       senderAddress = new account(event.params.from.toHexString());
-      senderAddress.points = 0;
-      senderAddress.revenue = constants.BIGINT_ZERO;
     }
 
     let receiverAddress = account.load(event.params.to.toHexString());
     if (!receiverAddress) {
       receiverAddress = new account(event.params.to.toHexString());
-      receiverAddress.points = 0;
-      receiverAddress.revenue = constants.BIGINT_ZERO;
     }
 
     let senderAccountCollection = accountCollection.load(
@@ -42,6 +38,10 @@ export function handleTransfer(event: TransferEvent): void {
       senderAddress.id != "0x0000000000000000000000000000000000000000"
     ) {
       let senderTokenCountNew = senderAccountCollection.tokenCount - 1;
+
+      senderAddress.points = 0;
+      senderAddress.revenue = constants.BIGINT_ZERO;
+
       senderAccountCollection.tokenCount = senderTokenCountNew;
       senderAccountCollection.save();
 
@@ -61,6 +61,9 @@ export function handleTransfer(event: TransferEvent): void {
       receiverAddress.id != "0x0000000000000000000000000000000000000000"
     ) {
       let receiverTokenCountNew = receiverAccountCollection.tokenCount + 1;
+
+      receiverAddress.points = 0;
+      receiverAddress.revenue = constants.BIGINT_ZERO;
 
       receiverAccountCollection.tokenCount = receiverTokenCountNew;
       receiverAccountCollection.save();
