@@ -1,0 +1,419 @@
+type SupportedCollection @entity {
+  " the ID is supportedcollection and collection address "
+  id: ID!
+
+  " Collection fee revenue collector "
+  feeCollector: Bytes!
+
+  " The trading fee for the collection "
+  royaltyFees: BigInt!
+
+  " Collection verification status "
+  verificationStatus: Int!
+
+  " The collection address "
+  collection: collection!
+}
+
+type SaleInfo @entity {
+  " The ID is the concatenation of the saleinfo, collection address, and token ID "
+  id: ID!
+
+  " The collection address for the sale "
+  collection: collection!
+
+  " The token ID involved in the sale "
+  tokenId: token!
+
+  " The seller of the token "
+  seller: account!
+
+  " The price of the token "
+  salePrice: BigInt
+
+  " The state of the sale; fixedSale, auctionSale and none "
+  state: String!
+
+  " The starting bid for the auction if sale is an auction "
+  startingBid: BigInt
+
+  " The highest bid and current for the auction "
+  highestBid: BigInt
+
+  " The highest bidder for the auction "
+  highestBidder: account
+
+  " The time the auction ends "
+  validity: BigInt
+
+  " The time the auction was created "
+  blockTimestamp: BigInt!
+
+  " The transaction hash for the sale "
+  transactionHash: Bytes!
+}
+
+type CollectionOffers @entity {
+  " The ID is the concatenation of the collectionoffers, collection address and the offer creator "
+  id: ID!
+
+  " The collection address for the offer "
+  collection: collection!
+
+  " The offer creator "
+  creator: account!
+
+  " The offer amount/value "
+  amount: BigInt!
+
+  " The total count of nfts the Offer creator is offering to buy "
+  total: BigInt!
+
+  " The time the offer was created "
+  blockTimestamp: BigInt!
+
+  " The transaction hash for the offer "
+  transactionHash: Bytes!
+}
+
+type CollectionsTokenOffers @entity {
+  " The ID is the concatenation of the collectionstokenoffers, collection address, and tokenId "
+  id: ID!
+
+  " The collection address for the offer "
+  collection: collection!
+
+  " The offer creator "
+  creator: account!
+
+  " The token ID involved in the offer "
+  tokenId: token!
+
+  " The offer amount/value "
+  value: BigInt!
+
+  " The time the offer was created "
+  blockTimestamp: BigInt!
+
+  " The transaction hash for the offer "
+  transactionHash: Bytes!
+}
+
+type contract @entity {
+  id: ID!
+  asERC721: collection
+}
+
+type account @entity {
+  " the wallet address "
+  id: ID!
+
+  " The NFTs owned by this account "
+  tokens: [token!]! @derivedFrom(field: "owner")
+
+  " The points earned by this account "
+  points: Int!
+
+  " The transfers originating from this account "
+  transfersFrom: [transfer!]! @derivedFrom(field: "senderAddress")
+
+  " The transfers recevied by this account"
+  transfersTo: [transfer!]! @derivedFrom(field: "receiverAddress")
+
+  " M:M relationship for Accounts and Collections "
+  accountCollection: [accountCollection!]! @derivedFrom(field: "account")
+
+  " Tokens on sale for account"
+  saleInfo: [SaleInfo!] @derivedFrom(field: "seller")
+
+  " Tokens bidded by account"
+  bids: [SaleInfo!] @derivedFrom(field: "highestBidder")
+
+  revenue: BigInt!
+
+  collectionoffers: [CollectionOffers!] @derivedFrom(field: "creator")
+
+  outgoingtokencollectionoffers: [CollectionsTokenOffers!]
+    @derivedFrom(field: "creator")
+}
+
+type collection @entity {
+  " The address of the collection "
+  id: ID!
+
+  " The name of the collection "
+  name: String
+
+  " The symbol for the collection "
+  symbol: String
+
+  " Total Supply of Tokens "
+  totalSupply: BigInt
+
+  " Mint Price "
+  mintPrice: BigDecimal
+
+  " Tokens for the collection"
+  tokens: [token!]! @derivedFrom(field: "collection")
+
+  " Tokens in the collection for sale"
+  saleInfo: [SaleInfo!] @derivedFrom(field: "collection")
+
+  collectionoffers: [CollectionOffers!] @derivedFrom(field: "collection")
+
+  " Collection supports metadata "
+  supportsMetadata: Boolean
+
+  " Total sales "
+  totalSales: Int!
+
+  " Total volume "
+  totalVolume: BigDecimal!
+
+  " Top Sale ever "
+  topSale: BigDecimal!
+
+  " Hourly info about the collection "
+  hourlyCollectionSnapshot: [hourlyCollectionSnapshot!]!
+    @derivedFrom(field: "collection")
+
+  " Daily info about the collection "
+  dailyCollectionSnapshot: [dailyCollectionSnapshot!]!
+    @derivedFrom(field: "collection")
+
+  " Weekly info about the collection "
+  weeklyCollectionSnapshot: [weeklyCollectionSnapshot!]!
+    @derivedFrom(field: "collection")
+
+  " M:M relationship for Accounts and Collections "
+  accountCollection: [accountCollection!]! @derivedFrom(field: "collection")
+}
+
+type token @entity {
+  " kcc / Collection Addrress - Token Id "
+  id: ID!
+
+  " The collection address "
+  collection: collection!
+
+  " The id of the NFT"
+  identifier: BigInt!
+
+  " The token URI "
+  tokenURI: String!
+
+  " Used to track last fetched time for token metadata "
+  updatedAtTimestamp: BigInt!
+
+  " The address that currently owns the token "
+  owner: account
+
+  " Transfers involving this token "
+  transfers: [transfer!]! @derivedFrom(field: "token")
+
+  saleInfo: SaleInfo @derivedFrom(field: "tokenId")
+}
+
+type _Schema_
+  @fulltext(
+    name: "marketSearch"
+    language: en
+    algorithm: rank
+    include: [
+      { entity: "token", fields: [{ name: "identifier" }] }
+      {
+        entity: "collection"
+        fields: [{ name: "id" }, { name: "name" }, { name: "symbol" }]
+      }
+      { entity: "account", fields: [{ name: "id" }] }
+    ]
+  )
+
+type accountCollection @entity {
+  " Account Id - Collection Id "
+  id: ID!
+
+  " Address of the account "
+  account: account
+
+  " Address of the NFT Collection "
+  collection: collection
+
+  " Count of NFT's owned in a collection by the Address"
+  tokenCount: Int!
+}
+
+type transaction @entity {
+  " the hash of the tx"
+  id: ID!
+
+  " Timestamp for block "
+  timestamp: Int!
+
+  " Block Number "
+  blockNumber: Int!
+
+  " Address who initiated the transaction "
+  transactionFrom: Bytes!
+
+  " Count of how many transfers were not matched to a sale "
+  unmatchedTransferCount: Int!
+
+  " Transfers that occured within the transaction "
+  transfers: [transfer!]!
+
+  " Sale events that occured within the transaction "
+  sales: [sale!] @derivedFrom(field: "transaction")
+
+  " Gas Spent "
+  gasPrice: BigInt
+}
+
+type transfer @entity {
+  " Block Number and Event Id in which the transfers event occured"
+  id: ID!
+
+  " Transaction hash in which the transfer event occured"
+  transaction: transaction!
+
+  " The collection address "
+  collection: collection!
+
+  " The collection addrress - The token id "
+  token: token!
+
+  " The sender address "
+  senderAddress: account
+
+  " The receiver address "
+  receiverAddress: account
+
+  " Timestamp for block "
+  timestamp: Int!
+
+  " Block Number "
+  blockNumber: Int!
+
+  " The amount of KCS/WKCS paid"
+  amount: BigDecimal!
+
+  " matched sale event for the transfer "
+  matchedSale: sale
+}
+
+type sale @entity {
+  " Block Number and Event Id in which the sale event occured"
+  id: ID!
+
+  " tx that the sale occured in "
+  transaction: transaction!
+
+  " the currency that the sale occred in "
+  currency: currency
+
+  " Timestamp for block "
+  timestamp: Int!
+
+  " Block Number "
+  blockNumber: Int!
+
+  " the amount of the sale "
+  amount: BigDecimal!
+
+  " The sale type "
+  strategy: String
+}
+
+type currency @entity {
+  " Currency Address "
+  id: ID!
+
+  decimals: Int
+
+  name: String!
+
+  symbol: String!
+}
+
+type hourlyCollectionSnapshot @entity {
+  " The collection address - The hour "
+  id: ID!
+
+  " Unix Hour (Timestamp / 3600 * 3600) "
+  timestamp: Int
+
+  " The collection address "
+  collection: collection!
+
+  " The hourly volume "
+  hourlyVolume: BigDecimal!
+
+  " Number of hourly transactions "
+  hourlyTransactions: Int
+
+  " Average sale amount for the day "
+  hourlyAvgSale: BigDecimal!
+
+  " Hourly top sales "
+  topSale: BigDecimal!
+
+  " Hourly bottom sales "
+  bottomSale: BigDecimal!
+}
+
+type dailyCollectionSnapshot @entity {
+  " The collection address - The day "
+  id: ID!
+
+  " Unix Day (Timestamp / 86400 * 86400) "
+  timestamp: Int
+
+  " The collection address "
+  collection: collection!
+
+  " The daily volume "
+  dailyVolume: BigDecimal!
+
+  " Number of daily transactions "
+  dailyTransactions: Int
+
+  " Average sale amount for the day "
+  dailyAvgSale: BigDecimal!
+
+  " Daily top sales "
+  topSale: BigDecimal!
+
+  " Daily bottom sales "
+  bottomSale: BigDecimal!
+}
+
+type weeklyCollectionSnapshot @entity {
+  " The collection address - The week "
+  id: ID!
+
+  " Unix Week (Timestamp / 604800 * 604800) "
+  timestamp: Int
+
+  " The collection address "
+  collection: collection!
+
+  " The monthly volume "
+  weeklyVolume: BigDecimal!
+
+  " Number of monthly transactions "
+  weeklyTransactions: Int
+
+  " Average sale amount for the day "
+  weeklyAvgSale: BigDecimal!
+
+  " Weekly top sales "
+  topSale: BigDecimal!
+
+  " Weekly bottom sales "
+  bottomSale: BigDecimal!
+}
+
+type wethTransaction @entity {
+  " Hash for weth contained transaction "
+  id: ID!
+}
