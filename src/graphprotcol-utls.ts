@@ -23,6 +23,9 @@ export namespace constants {
   export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
   export const BYTES32_ZERO =
     "0x0000000000000000000000000000000000000000000000000000000000000000";
+  export const Marketplace = "0xe6b4c2a0640bbd797b3361f79708f1d373edff30";
+  export const OfferHouse = "0x51f349056f7c4d234e60e3b347a12b9ad5f84c17";
+  export const Auction = "0xc97f99411316c441fd4f524c02a78836fc075e1e";
 }
 
 export namespace transactions {

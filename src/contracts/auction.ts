@@ -55,14 +55,14 @@ export function handleBidAccepted(event: BidAcceptedEvent): void {
   updateAuction(event);
   let sellerEntity = account.load(event.params.owner.toHex());
   if (sellerEntity != null) {
-    if (sellerEntity.points == null) {
+    if (!sellerEntity.points) {
       sellerEntity.points = 0;
     }
     sellerEntity.points = sellerEntity.points + 10;
   }
   let bidderEntity = account.load(event.params.bidder.toHex());
   if (bidderEntity != null) {
-    if (bidderEntity.points == null) {
+    if (!bidderEntity.points) {
       bidderEntity.points = 0;
     }
     bidderEntity.points = bidderEntity.points + 20;

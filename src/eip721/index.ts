@@ -3,9 +3,15 @@ import {
   transfer,
   transaction,
   accountCollection,
+  SaleInfo,
+  ApprovedForAll,
 } from "../../generated/schema";
 
-import { Transfer as TransferEvent } from "../../generated/IERC721/IERC721";
+import {
+  ApprovalForAll as ApprovalForAllEvent,
+  Transfer as TransferEvent,
+  Approval as ApprovalEvent,
+} from "../../generated/IERC721/IERC721";
 
 import { fetchRegistry, fetchToken } from "../utils/erc721";
 
@@ -107,4 +113,44 @@ export function handleTransfer(event: TransferEvent): void {
       tx.save();
     }
   }
+}
+
+export function handleApproval(event: ApprovalEvent): void {
+  let collectionAddress = event.address.toHexString();
+  let tokenId = event.params.tokenId.toString();
+  let tokenID = "kcc/"
+    .concat(collectionAddress)
+    .concat("/")
+    .concat(tokenId);
+  let saleInfoEntity = SaleInfo.load("saleinfo/".concat(tokenID));
+  if (saleInfoEntity != null) {
+    let approvedAddress = event.params.approved.toHexString();
+    if (approvedAddress == constants.Marketplace) {
+      saleInfoEntity.approved = true;
+    } else {
+      saleInfoEntity.approved = false;
+    }
+    saleInfoEntity.save();
+  }
+}
+
+export function handleApprovalForAll(event: ApprovalForAllEvent): void {
+  let collectionAddress = event.address.toHexString();
+  let owner = event.params.owner.toHexString();
+  let operator = event.params.operator.toHexString();
+  let approvedID = "approvedforall/".concat(collectionAddress).concat(owner);
+  let approvedForAllEntity = ApprovedForAll.load(approvedID);
+  if (approvedForAllEntity == null) {
+    approvedForAllEntity = new ApprovedForAll(approvedID);
+    approvedForAllEntity.id = approvedID;
+    approvedForAllEntity.collection = collectionAddress;
+    approvedForAllEntity.account = owner;
+    approvedForAllEntity.save();
+  }
+  if (operator == constants.Marketplace && event.params.approved == true) {
+    approvedForAllEntity.approved = true;
+  } else {
+    approvedForAllEntity.approved = false;
+  }
+  approvedForAllEntity.save();
 }

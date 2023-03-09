@@ -15,6 +15,20 @@ type SupportedCollection @entity {
   collection: collection!
 }
 
+type ApprovedForAll @entity {
+  " the ID is approvedforall, collection address and owner address "
+  id: ID!
+
+  " The collection address this account has approved for all "
+  collection: collection!
+
+  " The account that approved all nfts in this collection to marketplace "
+  account: account!
+
+  " The approval status "
+  approved: Boolean!
+}
+
 type SaleInfo @entity {
   " The ID is the concatenation of the saleinfo, collection address, and token ID "
   id: ID!
@@ -132,7 +146,8 @@ type account @entity {
   " Tokens bidded by account"
   bids: [SaleInfo!] @derivedFrom(field: "highestBidder")
 
-  revenue: BigInt
+  " Marketplace is approved to spend all this account nfts for a collection "
+  approved: [ApprovedForAll!] @derivedFrom(field: "account")
 
   collectionOffers: [CollectionOffer!] @derivedFrom(field: "creator")
 

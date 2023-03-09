@@ -8,7 +8,6 @@ import {
   ItemListed as ItemListedEvent,
   ItemSold as ItemSoldEvent,
   ItemUpdated as ItemUpdatedEvent,
-  RevenueWithdrawn as RevenueWithdrawnEvent,
 } from "../../generated/Marketplace/Marketplace";
 import {
   SupportedCollection,
@@ -20,7 +19,6 @@ import {
 import { store, BigInt } from "@graphprotocol/graph-ts";
 import { fetchRegistry, fetchToken } from "../utils/erc721";
 import { updateMarketplace } from "./contractUtils";
-import { constants } from "../graphprotcol-utls";
 
 export function handleCollectionAdded(event: CollectionAddedEvent): void {
   let collectionEntity = collection.load(event.params._collection.toHex());
@@ -137,14 +135,14 @@ export function handleItemSold(event: ItemSoldEvent): void {
   updateMarketplace(event);
   let sellerEntity = account.load(event.params.seller.toHex());
   if (sellerEntity != null) {
-    if (sellerEntity.points == null) {
+    if (!sellerEntity.points) {
       sellerEntity.points = 0;
     }
     sellerEntity.points = sellerEntity.points + 10;
   }
   let buyerEntity = account.load(event.params.buyer.toHex());
   if (buyerEntity != null) {
-    if (buyerEntity.points == null) {
+    if (!buyerEntity.points) {
       buyerEntity.points = 0;
     }
     buyerEntity.points = buyerEntity.points + 20;
@@ -170,17 +168,3 @@ export function handleItemUpdated(event: ItemUpdatedEvent): void {
     entity.save();
   }
 }
-
-// export function handleRevenueWithdrawn(event: RevenueWithdrawnEvent): void {
-//   let entity = account.load(event.params.eoa.toHex());
-//   if (entity != null) {
-//     if (entity.revenue == null) {
-//       entity.revenue = constants.BIGINT_ZERO;
-//     }
-//     let pastRevenue = entity.revenue;
-//     pastRevenue.plus(event.params.amount);
-//     entity.revenue = pastRevenue;
-
-//     entity.save();
-//   }
-// }

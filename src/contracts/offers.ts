@@ -34,14 +34,14 @@ export function handleCollectionOfferAccepted(
   );
   let creatorEntity = account.load(event.params.buyer.toHexString());
   if (creatorEntity != null) {
-    if (creatorEntity.points == null) {
+    if (!creatorEntity.points) {
       creatorEntity.points = 0;
     }
     creatorEntity.points = creatorEntity.points + 20;
   }
   let sellerEntity = account.load(event.params.seller.toHexString());
   if (sellerEntity != null) {
-    if (sellerEntity.points == null) {
+    if (!sellerEntity.points) {
       sellerEntity.points = 0;
     }
     sellerEntity.points = sellerEntity.points + 10;
@@ -115,14 +115,14 @@ export function handleMultipleCart(event: MultipleCartEvent): void {
   let entity = SaleInfo.load("saleinfo/".concat(tokenEntityId));
   let buyerEntity = account.load(event.params.buyer.toHexString());
   if (buyerEntity != null) {
-    if (buyerEntity.points == null) {
+    if (!buyerEntity.points) {
       buyerEntity.points = 0;
     }
     buyerEntity.points = buyerEntity.points + 20;
   }
   let sellerEntity = account.load(event.params.owner.toHexString());
   if (sellerEntity != null) {
-    if (sellerEntity.points == null) {
+    if (!sellerEntity.points) {
       sellerEntity.points = 0;
     }
     sellerEntity.points = sellerEntity.points + 10;
@@ -147,14 +147,14 @@ export function handleOfferAccepted(event: OfferAcceptedEvent): void {
   updateOffers(event);
   let creator = account.load(event.params.creator.toHex());
   if (creator != null) {
-    if (creator.points == null) {
+    if (!creator.points) {
       creator.points = 0;
     }
     creator.points = creator.points + 20;
   }
   let seller = account.load(event.params.owner.toHex());
   if (seller != null) {
-    if (seller.points == null) {
+    if (!seller.points) {
       seller.points = 0;
     }
     seller.points = seller.points + 10;
