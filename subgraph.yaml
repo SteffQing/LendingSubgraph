@@ -161,3 +161,5 @@ dataSources:
         - event: BidCreated(indexed address,indexed address,indexed uint256,uint256)
           handler: handleBidCreated
       file: ./src/contracts/auction.ts
+features:
+  - fullTextSearch

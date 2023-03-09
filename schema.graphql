@@ -207,6 +207,9 @@ type token @entity {
   " Used to track last fetched time for token metadata "
   updatedAtTimestamp: BigInt!
 
+  " Token ID / identifier but as a string for fullTextSearch "
+  tokenId: String!
+
   " The address that currently owns the token "
   owner: account
 
@@ -404,3 +407,18 @@ type wethTransaction @entity {
   " Hash for weth contained transaction "
   id: ID!
 }
+
+type _Schema_
+  @fulltext(
+    name: "marketSearch"
+    language: en
+    algorithm: rank
+    include: [
+      { entity: "token", fields: [{ name: "tokenId" }] }
+      { entity: "account", fields: [{ name: "id" }] }
+      {
+        entity: "collection"
+        fields: [{ name: "id", name: "name", name: "symbol" }]
+      }
+    ]
+  )

@@ -1,8 +1,4 @@
-import {
-  Address,
-  BigDecimal,
-  BigInt,
-} from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 
 import { IERC721Metadata } from "../../generated/IERC721/IERC721Metadata";
 
@@ -76,6 +72,7 @@ export function fetchToken(
     tokenEntity = new token(tokenid);
     tokenEntity.collection = collection.id;
     tokenEntity.identifier = id;
+    tokenEntity.tokenId = id.toString();
 
     //update collection's total supply
     let Collection = Contract721.bind(Address.fromString(collection.id));
