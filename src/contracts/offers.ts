@@ -1,5 +1,5 @@
 import { BigInt, store } from "@graphprotocol/graph-ts";
-import { account, collection, SaleInfo } from "../../generated/schema";
+import { account, collection, SaleInfo, token } from "../../generated/schema";
 import {
   CollectionOfferAccepted as CollectionOfferAcceptedEvent,
   CollectionOfferCreated as CollectionOfferCreatedEvent,
@@ -10,10 +10,7 @@ import {
   OfferCreated as OfferCreatedEvent,
   OfferUpdated as OfferUpdatedEvent,
 } from "../../generated/Offers/Offers";
-import {
-  CollectionOffers,
-  CollectionsTokenOffers,
-} from "../../generated/schema";
+import { CollectionOffer, CollectionsTokenOffer } from "../../generated/schema";
 import { constants } from "../graphprotcol-utls";
 import { fetchRegistry, fetchToken } from "../utils/erc721";
 import { updateOffers } from "./offersUtils";
@@ -23,41 +20,44 @@ import { updateMulticart } from "./multicartUtils";
 export function handleCollectionOfferAccepted(
   event: CollectionOfferAcceptedEvent
 ): void {
-  let collectionEntity = fetchRegistry(event.params.collection);
-  if (collectionEntity != null) {
-    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-    let tokenEntity = fetchToken(
-      collectionEntity,
-      event.params.tokenId,
-      timestampBigInt
-    );
-    let entity = CollectionOffers.load(
-      "collectionoffers/"
-        .concat(collectionEntity.id)
-        .concat("/")
-        .concat(event.params.buyer.toHexString())
-    );
-    let creatorEntity = account.load(event.params.buyer.toHexString());
-    if (creatorEntity != null) {
-      creatorEntity.points = creatorEntity.points + 20;
+  let collectionAddress = event.params.collection.toHex();
+  let tokenId = event.params.tokenId;
+  let tokenEntityId = "kcc/"
+    .concat(collectionAddress)
+    .concat("/")
+    .concat(tokenId.toString());
+  let entity = CollectionOffer.load(
+    "collectionoffer/"
+      .concat(collectionAddress)
+      .concat("/")
+      .concat(event.params.buyer.toHexString())
+  );
+  let creatorEntity = account.load(event.params.buyer.toHexString());
+  if (creatorEntity != null) {
+    if (creatorEntity.points == null) {
+      creatorEntity.points = 0;
     }
-    let sellerEntity = account.load(event.params.seller.toHexString());
-    if (sellerEntity != null) {
-      sellerEntity.points = sellerEntity.points + 10;
+    creatorEntity.points = creatorEntity.points + 20;
+  }
+  let sellerEntity = account.load(event.params.seller.toHexString());
+  if (sellerEntity != null) {
+    if (sellerEntity.points == null) {
+      sellerEntity.points = 0;
     }
-    if (entity != null) {
-      let saleInfoEntity = SaleInfo.load("saleinfo/".concat(tokenEntity.id));
-      if (saleInfoEntity != null) {
-        store.remove("SaleInfo", saleInfoEntity.id);
-      }
-      updateCollectionOffers(event);
-      entity.amount = entity.amount.minus(event.params.value);
-      entity.total = entity.total.minus(constants.BIGINT_ONE);
-      if (entity.total.equals(constants.BIGINT_ZERO)) {
-        store.remove("CollectionOffers", entity.id);
-      } else {
-        entity.save();
-      }
+    sellerEntity.points = sellerEntity.points + 10;
+  }
+  if (entity != null) {
+    let saleInfoEntity = SaleInfo.load("saleinfo/".concat(tokenEntityId));
+    if (saleInfoEntity != null) {
+      store.remove("SaleInfo", saleInfoEntity.id);
+    }
+    updateCollectionOffers(event);
+    entity.amount = entity.amount.minus(event.params.value);
+    entity.total = entity.total.minus(constants.BIGINT_ONE);
+    if (entity.total.equals(constants.BIGINT_ZERO)) {
+      store.remove("CollectionOffer", entity.id);
+    } else {
+      entity.save();
     }
   }
 }
@@ -65,164 +65,168 @@ export function handleCollectionOfferAccepted(
 export function handleCollectionOfferCreated(
   event: CollectionOfferCreatedEvent
 ): void {
-  let collectionEntity = fetchRegistry(event.params.collection);
-  if (collectionEntity != null) {
-    let entity = new CollectionOffers(
-      "collectionoffers/"
-        .concat(collectionEntity.id)
-        .concat("/")
-        .concat(event.params.buyer.toHexString())
-    );
-    let creatorEntity = account.load(event.params.buyer.toHexString());
-    if (creatorEntity == null) {
-      creatorEntity = new account(event.params.buyer.toHexString());
-    }
-    entity.creator = creatorEntity.id;
-    entity.collection = collectionEntity.id;
-    entity.amount = event.params.amount;
-    entity.total = event.params.total;
-    entity.blockTimestamp = event.block.timestamp;
-    entity.transactionHash = event.transaction.hash;
-
-    entity.save();
+  let collectionAddress = event.params.collection.toHex();
+  let collectionEntity = collection.load(collectionAddress);
+  if (collectionEntity == null) {
+    collectionEntity = fetchRegistry(event.params.collection);
   }
+  let entity = new CollectionOffer(
+    "collectionoffer/"
+      .concat(collectionEntity.id)
+      .concat("/")
+      .concat(event.params.buyer.toHexString())
+  );
+  let creatorEntity = account.load(event.params.buyer.toHexString());
+  if (creatorEntity == null) {
+    creatorEntity = new account(event.params.buyer.toHexString());
+  }
+  entity.creator = creatorEntity.id;
+  entity.collection = collectionEntity.id;
+  entity.amount = event.params.amount;
+  entity.total = event.params.total;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
 }
 
 export function handleCollectionOfferDeleted(
   event: CollectionOfferDeletedEvent
 ): void {
-  let collectionEntity = fetchRegistry(event.params.collection);
-  if (collectionEntity != null) {
-    let entity = CollectionOffers.load(
-      "collectionoffers/"
-        .concat(collectionEntity.id)
-        .concat("/")
-        .concat(event.params.buyer.toHexString())
-    );
-    if (entity != null) {
-      store.remove("CollectionOffers", entity.id);
-    }
+  let collectionAddress = event.params.collection.toHex();
+  let entity = CollectionOffer.load(
+    "collectionoffer/"
+      .concat(collectionAddress)
+      .concat("/")
+      .concat(event.params.buyer.toHexString())
+  );
+  if (entity != null) {
+    store.remove("CollectionOffer", entity.id);
   }
 }
 
 export function handleMultipleCart(event: MultipleCartEvent): void {
-  let collectionEntity = collection.load(event.params.collections.toHex());
-  if (collectionEntity != null) {
-    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-    let tokenEntity = fetchToken(
-      collectionEntity,
-      event.params.tokenId,
-      timestampBigInt
-    );
-    let entity = SaleInfo.load("saleinfo/".concat(tokenEntity.id));
-    let buyerEntity = account.load(event.params.buyer.toHexString());
-    if (buyerEntity != null) {
-      buyerEntity.points = buyerEntity.points + 20;
+  let collectionAddress = event.params.collections.toHex();
+  let tokenId = event.params.tokenId.toString();
+  let tokenEntityId = "kcc/"
+    .concat(collectionAddress)
+    .concat("/")
+    .concat(tokenId);
+  let entity = SaleInfo.load("saleinfo/".concat(tokenEntityId));
+  let buyerEntity = account.load(event.params.buyer.toHexString());
+  if (buyerEntity != null) {
+    if (buyerEntity.points == null) {
+      buyerEntity.points = 0;
     }
-    let sellerEntity = account.load(event.params.owner.toHexString());
-    if (sellerEntity != null) {
-      sellerEntity.points = sellerEntity.points + 10;
+    buyerEntity.points = buyerEntity.points + 20;
+  }
+  let sellerEntity = account.load(event.params.owner.toHexString());
+  if (sellerEntity != null) {
+    if (sellerEntity.points == null) {
+      sellerEntity.points = 0;
     }
-    updateMulticart(event);
-    if (entity != null) {
-      store.remove("SaleInfo", entity.id);
-    }
+    sellerEntity.points = sellerEntity.points + 10;
+  }
+  updateMulticart(event);
+  if (entity != null) {
+    store.remove("SaleInfo", entity.id);
   }
 }
 
 export function handleOfferAccepted(event: OfferAcceptedEvent): void {
-  let collectionEntity = collection.load(event.params.collection.toHex());
-  if (collectionEntity != null) {
-    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-    let tokenEntity = fetchToken(
-      collectionEntity,
-      event.params.tokenId,
-      timestampBigInt
-    );
-    let id = "collectiontokensoffers/"
-      .concat(tokenEntity.id)
-      .concat("/")
-      .concat(event.params.creator.toHex());
-    updateOffers(event);
-    let creator = account.load(event.params.creator.toHex());
-    if (creator != null) {
-      creator.points = creator.points + 20;
+  let collectionAddress = event.params.collection.toHex();
+  let tokenId = event.params.tokenId.toString();
+  let tokenEntityId = "kcc/"
+    .concat(collectionAddress)
+    .concat("/")
+    .concat(tokenId);
+  let id = "collectionstokenoffer/"
+    .concat(tokenEntityId)
+    .concat("/")
+    .concat(event.params.creator.toHex());
+  updateOffers(event);
+  let creator = account.load(event.params.creator.toHex());
+  if (creator != null) {
+    if (creator.points == null) {
+      creator.points = 0;
     }
-    let seller = account.load(event.params.owner.toHex());
-    if (seller != null) {
-      seller.points = seller.points + 10;
+    creator.points = creator.points + 20;
+  }
+  let seller = account.load(event.params.owner.toHex());
+  if (seller != null) {
+    if (seller.points == null) {
+      seller.points = 0;
     }
-    let entity = CollectionsTokenOffers.load(id);
-    if (entity != null) {
-      store.remove("CollectionsTokenOffers", id);
-    }
+    seller.points = seller.points + 10;
+  }
+  let entity = CollectionsTokenOffer.load(id);
+  if (entity != null) {
+    store.remove("CollectionsTokenOffer", id);
   }
 }
 
 export function handleOfferCancelled(event: OfferCancelledEvent): void {
-  let collectionEntity = collection.load(event.params.collection.toHex());
-  if (collectionEntity != null) {
-    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-    let tokenEntity = fetchToken(
-      collectionEntity,
-      event.params.tokenId,
-      timestampBigInt
-    );
-    let id = "collectiontokensoffers/"
-      .concat(tokenEntity.id)
-      .concat("/")
-      .concat(event.params.creator.toHex());
-    let entity = CollectionsTokenOffers.load(id);
-    if (entity != null) {
-      store.remove("CollectionsTokenOffers", id);
-    }
+  let collectionAddress = event.params.collection.toHex();
+  let tokenId = event.params.tokenId.toString();
+  let tokenEntityId = "kcc/"
+    .concat(collectionAddress)
+    .concat("/")
+    .concat(tokenId);
+  let id = "collectionstokenoffer/"
+    .concat(tokenEntityId)
+    .concat("/")
+    .concat(event.params.creator.toHex());
+  let entity = CollectionsTokenOffer.load(id);
+  if (entity != null) {
+    store.remove("CollectionsTokenOffer", id);
   }
 }
 
 export function handleOfferCreated(event: OfferCreatedEvent): void {
   let collectionEntity = collection.load(event.params.collection.toHex());
-  if (collectionEntity != null) {
-    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-    let tokenEntity = fetchToken(
-      collectionEntity,
-      event.params.tokenId,
-      timestampBigInt
-    );
-    let entityId = "collectiontokensoffers/"
-      .concat(tokenEntity.id)
-      .concat("/")
-      .concat(event.params.creator.toHex());
-    let entity = new CollectionsTokenOffers(entityId);
-    entity.id = entityId;
-    entity.collection = collectionEntity.id;
-    entity.tokenId = tokenEntity.id;
-    entity.creator = event.params.creator.toHex();
-    entity.value = event.params.value;
-
-    entity.blockTimestamp = event.block.timestamp;
-    entity.transactionHash = event.transaction.hash;
-
-    entity.save();
+  if (collectionEntity == null) {
+    collectionEntity = fetchRegistry(event.params.collection);
   }
+  let tokenEntityId = "kcc/"
+    .concat(collectionEntity.id)
+    .concat("/")
+    .concat(event.params.tokenId.toString());
+  let TOKEN = token.load(tokenEntityId);
+  if (TOKEN == null) {
+    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
+    TOKEN = fetchToken(collectionEntity, event.params.tokenId, timestampBigInt);
+  }
+  let entityId = "collectionstokenoffer/"
+    .concat(TOKEN.id)
+    .concat("/")
+    .concat(event.params.creator.toHex());
+  let entity = new CollectionsTokenOffer(entityId);
+  entity.id = entityId;
+  entity.collection = collectionEntity.id;
+  entity.tokenId = TOKEN.id;
+  entity.creator = event.params.creator.toHex();
+  entity.value = event.params.value;
+
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  entity.save();
 }
 
 export function handleOfferUpdated(event: OfferUpdatedEvent): void {
-  let collectionEntity = collection.load(event.params.collection.toHex());
-  if (collectionEntity != null) {
-    let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-    let tokenEntity = fetchToken(
-      collectionEntity,
-      event.params.tokenId,
-      timestampBigInt
-    );
-    let id = "collectiontokensoffers/"
-      .concat(tokenEntity.id)
-      .concat("/")
-      .concat(event.params.creator.toHex());
-    let entity = CollectionsTokenOffers.load(id);
-    if (entity != null) {
-      entity.value = event.params.value;
-      entity.save();
-    }
+  let collectionAddress = event.params.collection.toHex();
+  let tokenId = event.params.tokenId.toString();
+  let tokenEntityId = "kcc/"
+    .concat(collectionAddress)
+    .concat("/")
+    .concat(tokenId);
+  let id = "collectionstokenoffer/"
+    .concat(tokenEntityId)
+    .concat("/")
+    .concat(event.params.creator.toHex());
+  let entity = CollectionsTokenOffer.load(id);
+  if (entity != null) {
+    entity.value = event.params.value;
+    entity.save();
   }
 }

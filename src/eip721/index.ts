@@ -3,7 +3,6 @@ import {
   transfer,
   transaction,
   accountCollection,
-  CollectionsTokenOffers,
 } from "../../generated/schema";
 
 import { Transfer as TransferEvent } from "../../generated/IERC721/IERC721";
@@ -39,9 +38,6 @@ export function handleTransfer(event: TransferEvent): void {
     ) {
       let senderTokenCountNew = senderAccountCollection.tokenCount - 1;
 
-      senderAddress.points = 0;
-      senderAddress.revenue = constants.BIGINT_ZERO;
-
       senderAccountCollection.tokenCount = senderTokenCountNew;
       senderAccountCollection.save();
 
@@ -61,9 +57,6 @@ export function handleTransfer(event: TransferEvent): void {
       receiverAddress.id != "0x0000000000000000000000000000000000000000"
     ) {
       let receiverTokenCountNew = receiverAccountCollection.tokenCount + 1;
-
-      receiverAddress.points = 0;
-      receiverAddress.revenue = constants.BIGINT_ZERO;
 
       receiverAccountCollection.tokenCount = receiverTokenCountNew;
       receiverAccountCollection.save();
