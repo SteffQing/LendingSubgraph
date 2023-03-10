@@ -8,16 +8,15 @@ import {
   ItemListed as ItemListedEvent,
   ItemSold as ItemSoldEvent,
   ItemUpdated as ItemUpdatedEvent,
+  RevenueWithdrawn as RevenueWithdrawnEvent,
 } from "../../generated/Marketplace/Marketplace";
 import {
   SupportedCollection,
   SaleInfo,
   collection,
-  account,
-  token,
 } from "../../generated/schema";
 import { store, BigInt } from "@graphprotocol/graph-ts";
-import { fetchRegistry, fetchToken } from "../utils/erc721";
+import { fetchAccount, fetchRegistry, fetchToken } from "../utils/erc721";
 import { updateMarketplace } from "./contractUtils";
 
 export function handleCollectionAdded(event: CollectionAddedEvent): void {
@@ -99,29 +98,27 @@ export function handleItemListed(event: ItemListedEvent): void {
     .concat(collectionAddress)
     .concat("/")
     .concat(tokenId.toString());
-  let TOKEN = token.load(tokenEntityId);
   let entityId = "saleinfo/".concat(tokenEntityId);
-  let entity = SaleInfo.load(entityId);
-  if (TOKEN == null) {
-    let collectionEntity = fetchRegistry(event.params.collection);
-    if (collectionEntity != null) {
-      let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
-      fetchToken(collectionEntity, event.params.tokenId, timestampBigInt);
-    }
+  let collectionEntity = fetchRegistry(event.params.collection);
+  let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
+  let TOKEN = fetchToken(
+    collectionEntity,
+    event.params.tokenId,
+    timestampBigInt
+  );
+  let sellerEntity = fetchAccount(event.params.seller);
+  if (TOKEN != null) {
+    let entity = new SaleInfo(entityId);
+    entity.tokenId = TOKEN.id;
+    entity.collection = collectionEntity.id;
+    entity.seller = sellerEntity.id;
+    entity.salePrice = event.params.price;
+    entity.blockTimestamp = event.block.timestamp;
+    entity.transactionHash = event.transaction.hash;
+    entity.approved = true;
+    entity.state = "fixedSale";
+    entity.save();
   }
-  if (entity == null) {
-    entity = new SaleInfo(entityId);
-  }
-  entity.id = entityId;
-  entity.tokenId = tokenEntityId;
-  entity.collection = collectionAddress;
-  entity.seller = event.params.seller.toHex();
-  entity.salePrice = event.params.price;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-  entity.approved = true;
-  entity.state = "fixedSale";
-  entity.save();
 }
 
 export function handleItemSold(event: ItemSoldEvent): void {
@@ -133,20 +130,15 @@ export function handleItemSold(event: ItemSoldEvent): void {
     .concat(tokenId.toString());
   let entity = SaleInfo.load("saleinfo/".concat(tokenEntityId));
   updateMarketplace(event);
-  let sellerEntity = account.load(event.params.seller.toHex());
-  if (sellerEntity != null) {
-    if (!sellerEntity.points) {
-      sellerEntity.points = 0;
-    }
-    sellerEntity.points = sellerEntity.points + 10;
-  }
-  let buyerEntity = account.load(event.params.buyer.toHex());
-  if (buyerEntity != null) {
-    if (!buyerEntity.points) {
-      buyerEntity.points = 0;
-    }
-    buyerEntity.points = buyerEntity.points + 20;
-  }
+  let sellerEntity = fetchAccount(event.params.seller);
+  sellerEntity.points = sellerEntity.points + 10;
+  sellerEntity.totalSales = sellerEntity.totalSales + 1;
+  sellerEntity.save();
+  let buyerEntity = fetchAccount(event.params.buyer);
+  buyerEntity.totalVolume = buyerEntity.totalVolume.plus(event.params.price);
+  buyerEntity.points = buyerEntity.points + 20;
+  buyerEntity.save();
+
   if (entity != null) {
     store.remove("SaleInfo", entity.id);
   }
@@ -167,4 +159,10 @@ export function handleItemUpdated(event: ItemUpdatedEvent): void {
 
     entity.save();
   }
+}
+
+export function handleRevenueWithdrawn(event: RevenueWithdrawnEvent): void {
+  let entity = fetchAccount(event.params.eoa);
+  entity.revenue = entity.revenue.plus(event.params.amount);
+  entity.save();
 }

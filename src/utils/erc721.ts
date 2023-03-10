@@ -50,6 +50,7 @@ export function fetchRegistry(address: Address): collection {
     collectionEntity.totalSales = 0;
     collectionEntity.totalVolume = constants.BIGDECIMAL_ZERO;
     collectionEntity.topSale = constants.BIGDECIMAL_ZERO;
+    collectionEntity.TVL = constants.BIGINT_ZERO;
   }
   return collectionEntity as collection;
 }
@@ -65,7 +66,7 @@ export function fetchToken(
   let lastUpdate = tokenEntity
     ? tokenEntity.updatedAtTimestamp.plus(timeout)
     : BigInt.fromI32(0);
-  if (tokenEntity == null || lastUpdate < timestamp) {
+  if (tokenEntity == null || lastUpdate.lt(timestamp)) {
     let account_zero = new account(constants.ADDRESS_ZERO);
     account_zero.save();
 
@@ -86,4 +87,18 @@ export function fetchToken(
       : try_totalSupply.value;
   }
   return tokenEntity as token;
+}
+
+export function fetchAccount(address: Address): account {
+  let accountEntity = account.load(address.toHexString());
+  if (accountEntity == null) {
+    accountEntity = new account(address.toHexString());
+    accountEntity.points = 0;
+    accountEntity.totalVolume = constants.BIGINT_ZERO;
+    accountEntity.revenue = constants.BIGINT_ZERO;
+    accountEntity.totalSales = 0;
+
+    accountEntity.save();
+  }
+  return accountEntity as account;
 }

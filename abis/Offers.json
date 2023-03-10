@@ -1,25 +1,24 @@
 [
   {
     "inputs": [
-      { "internalType": "uint16", "name": "_tradeFee", "type": "uint16" },
-      { "internalType": "address", "name": "_WKCS", "type": "address" },
-      { "internalType": "address", "name": "_void", "type": "address" }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
       {
-        "indexed": true,
+        "internalType": "uint16",
+        "name": "_tradeFee",
+        "type": "uint16"
+      },
+      {
         "internalType": "address",
-        "name": "admin",
+        "name": "_WKCS",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_void",
         "type": "address"
       }
     ],
-    "name": "AdminUpdated",
-    "type": "event"
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
     "anonymous": false,
@@ -84,6 +83,12 @@
         "internalType": "uint256",
         "name": "total",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "validity",
+        "type": "uint256"
       }
     ],
     "name": "CollectionOfferCreated",
@@ -112,80 +117,6 @@
       }
     ],
     "name": "CollectionOfferDeleted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "buyer",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "collection",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "tokenId",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "InstantSale",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "buyer",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "collections",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "MultipleCart",
     "type": "event"
   },
   {
@@ -288,6 +219,12 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "validity",
+        "type": "uint256"
       }
     ],
     "name": "OfferCreated",
@@ -324,6 +261,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "validity",
         "type": "uint256"
       }
     ],
@@ -367,19 +310,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "fees",
-        "type": "uint256"
-      }
-    ],
-    "name": "TradeFeeUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "address",
         "name": "account",
         "type": "address"
@@ -390,9 +320,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
-      { "internalType": "address", "name": "_offerer", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_offerer",
+        "type": "address"
+      }
     ],
     "name": "acceptOffer",
     "outputs": [],
@@ -401,7 +343,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
     ],
     "name": "cancelCollectionOffer",
     "outputs": [],
@@ -410,8 +356,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "cancelOffer",
     "outputs": [],
@@ -448,7 +402,11 @@
         "name": "_tokenId",
         "type": "uint256[][]"
       },
-      { "internalType": "uint256", "name": "_price", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      }
     ],
     "name": "cartWithWKCS",
     "outputs": [],
@@ -457,9 +415,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_total", "type": "uint256" },
-      { "internalType": "uint256", "name": "_validity", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_total",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_validity",
+        "type": "uint256"
+      }
     ],
     "name": "createCOWithKCS",
     "outputs": [],
@@ -468,10 +438,26 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "_total", "type": "uint256" },
-      { "internalType": "uint256", "name": "_validity", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_total",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_validity",
+        "type": "uint256"
+      }
     ],
     "name": "createCOWithWKCS",
     "outputs": [],
@@ -480,9 +466,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_validity", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_validity",
+        "type": "uint256"
+      }
     ],
     "name": "createOfferWithKCS",
     "outputs": [],
@@ -491,10 +489,26 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_value", "type": "uint256" },
-      { "internalType": "uint256", "name": "_validity", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_validity",
+        "type": "uint256"
+      }
     ],
     "name": "createOfferWithWKCS",
     "outputs": [],
@@ -503,25 +517,41 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
     ],
     "name": "getCollectionOffers",
     "outputs": [
       {
         "components": [
-          { "internalType": "address", "name": "creator", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "creator",
+            "type": "address"
+          },
           {
             "internalType": "address",
             "name": "collection",
             "type": "address"
           },
-          { "internalType": "uint256", "name": "amount", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
           {
             "internalType": "uint256",
             "name": "totalPurchase",
             "type": "uint256"
           },
-          { "internalType": "uint256", "name": "validity", "type": "uint256" }
+          {
+            "internalType": "uint256",
+            "name": "validity",
+            "type": "uint256"
+          }
         ],
         "internalType": "struct DistantOffers.CollectionOffers[]",
         "name": "_collectionOffers",
@@ -533,32 +563,51 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" }
-    ],
-    "name": "getCollectionTVL",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "getOffers",
     "outputs": [
       {
         "components": [
-          { "internalType": "address", "name": "buyer", "type": "address" },
-          { "internalType": "uint256", "name": "price", "type": "uint256" },
-          { "internalType": "uint256", "name": "validity", "type": "uint256" },
+          {
+            "internalType": "address",
+            "name": "buyer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "validity",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "collection",
             "type": "address"
           },
-          { "internalType": "uint256", "name": "token", "type": "uint256" },
-          { "internalType": "address", "name": "owner", "type": "address" }
+          {
+            "internalType": "uint256",
+            "name": "token",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
         ],
         "internalType": "struct DistantOffers.Offer[]",
         "name": "offerInfo",
@@ -570,24 +619,56 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "getUserOffer",
     "outputs": [
       {
         "components": [
-          { "internalType": "address", "name": "buyer", "type": "address" },
-          { "internalType": "uint256", "name": "price", "type": "uint256" },
-          { "internalType": "uint256", "name": "validity", "type": "uint256" },
+          {
+            "internalType": "address",
+            "name": "buyer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "validity",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "collection",
             "type": "address"
           },
-          { "internalType": "uint256", "name": "token", "type": "uint256" },
-          { "internalType": "address", "name": "owner", "type": "address" }
+          {
+            "internalType": "uint256",
+            "name": "token",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
         ],
         "internalType": "struct DistantOffers.Offer",
         "name": "",
@@ -599,21 +680,45 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "address", "name": "_collection", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
     ],
     "name": "getUserOffers",
     "outputs": [
-      { "internalType": "uint256[]", "name": "tokens", "type": "uint256[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "tokens",
+        "type": "uint256[]"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_buyer", "type": "address" },
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_buyer",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "instantSell",
     "outputs": [],
@@ -623,7 +728,13 @@
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -637,14 +748,28 @@
   {
     "inputs": [],
     "name": "paused",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "address", "name": "_creator", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_creator",
+        "type": "address"
+      }
     ],
     "name": "proxyRemoveCollectionOffer",
     "outputs": [],
@@ -653,9 +778,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "address", "name": "_user", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "proxyRemoveUserOffer",
     "outputs": [],
@@ -664,8 +801,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "recoverNFT",
     "outputs": [],
@@ -674,8 +819,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_token", "type": "address" },
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
     "name": "recoverToken",
     "outputs": [],
@@ -691,7 +844,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -707,7 +864,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_newAdmin", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_newAdmin",
+        "type": "address"
+      }
     ],
     "name": "updateAdmin",
     "outputs": [],
@@ -716,8 +877,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "updateOfferWithKCS",
     "outputs": [],
@@ -726,9 +895,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" },
-      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_newValue", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_newValue",
+        "type": "uint256"
+      }
     ],
     "name": "updateOfferWithWKCS",
     "outputs": [],
@@ -737,7 +918,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint8", "name": "_newTradeFee", "type": "uint8" }
+      {
+        "internalType": "uint8",
+        "name": "_newTradeFee",
+        "type": "uint8"
+      }
     ],
     "name": "updateTradeFee",
     "outputs": [],
@@ -746,7 +931,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_void", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_void",
+        "type": "address"
+      }
     ],
     "name": "updateVoidAddress",
     "outputs": [],

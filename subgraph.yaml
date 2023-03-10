@@ -44,6 +44,8 @@ dataSources:
           handler: handleItemSold
         - event: ItemUpdated(indexed address,indexed uint32,uint256,indexed address)
           handler: handleItemUpdated
+        - event: RevenueWithdrawn(indexed address,indexed uint256)
+          handler: handleRevenueWithdrawn
       file: ./src/contracts/marketplace.ts
   - kind: ethereum
     name: IERC721
@@ -120,19 +122,17 @@ dataSources:
       eventHandlers:
         - event: CollectionOfferAccepted(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleCollectionOfferAccepted
-        - event: CollectionOfferCreated(indexed address,indexed address,indexed uint256,uint256)
+        - event: CollectionOfferCreated(indexed address,indexed address,indexed uint256,uint256,uint256)
           handler: handleCollectionOfferCreated
         - event: CollectionOfferDeleted(indexed address,indexed address,indexed uint256)
           handler: handleCollectionOfferDeleted
-        - event: MultipleCart(indexed address,indexed address,uint256,indexed address,uint256)
-          handler: handleMultipleCart
         - event: OfferAccepted(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleOfferAccepted
         - event: OfferCancelled(indexed address,address,indexed address,indexed uint256)
           handler: handleOfferCancelled
-        - event: OfferCreated(indexed address,indexed address,uint256,indexed address,uint256)
+        - event: OfferCreated(indexed address,indexed address,uint256,indexed address,uint256,uint256)
           handler: handleOfferCreated
-        - event: OfferUpdated(indexed address,indexed address,uint256,indexed address,uint256)
+        - event: OfferUpdated(indexed address,indexed address,uint256,indexed address,uint256,uint256)
           handler: handleOfferUpdated
       file: ./src/contracts/offers.ts
   - kind: ethereum

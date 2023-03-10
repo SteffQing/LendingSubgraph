@@ -14,9 +14,7 @@ export function updateCollectionOffers(
       event.block.number.toString() + "-" + event.logIndex.toString()
     );
     if (!saleEntity && tx.unmatchedTransferCount > 0) {
-      let WKCS = Address.fromString(
-        "0x69567cffe9918dbef4cd24b30fddce4c13389dcf"
-      );
+      let WKCS = Address.fromString(constants.WKCS);
       let KCS = Address.fromString(constants.ADDRESS_ZERO);
       const CURRENCY = event.transaction.value.gt(constants.BIGINT_ZERO)
         ? KCS

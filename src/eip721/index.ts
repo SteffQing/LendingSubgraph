@@ -13,7 +13,7 @@ import {
   Approval as ApprovalEvent,
 } from "../../generated/IERC721/IERC721";
 
-import { fetchRegistry, fetchToken } from "../utils/erc721";
+import { fetchAccount, fetchRegistry, fetchToken } from "../utils/erc721";
 
 import { constants, events, transactions } from "../graphprotcol-utls";
 
@@ -27,12 +27,12 @@ export function handleTransfer(event: TransferEvent): void {
 
     let senderAddress = account.load(event.params.from.toHexString());
     if (!senderAddress) {
-      senderAddress = new account(event.params.from.toHexString());
+      senderAddress = fetchAccount(event.params.from);
     }
 
     let receiverAddress = account.load(event.params.to.toHexString());
     if (!receiverAddress) {
-      receiverAddress = new account(event.params.to.toHexString());
+      receiverAddress = fetchAccount(event.params.to);
     }
 
     let senderAccountCollection = accountCollection.load(
@@ -80,7 +80,7 @@ export function handleTransfer(event: TransferEvent): void {
 
       receiverAccountCollection.save();
     }
-    if (receiverAddress.id == "0xc97F99411316C441fd4f524c02A78836Fc075E1E") {
+    if (receiverAddress.id == constants.Auction) {
       token.owner = senderAddress.id;
     } else {
       token.owner = receiverAddress.id;
@@ -135,22 +135,28 @@ export function handleApproval(event: ApprovalEvent): void {
 }
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-  let collectionAddress = event.address.toHexString();
-  let owner = event.params.owner.toHexString();
-  let operator = event.params.operator.toHexString();
-  let approvedID = "approvedforall/".concat(collectionAddress).concat(owner);
-  let approvedForAllEntity = ApprovedForAll.load(approvedID);
-  if (approvedForAllEntity == null) {
-    approvedForAllEntity = new ApprovedForAll(approvedID);
-    approvedForAllEntity.id = approvedID;
-    approvedForAllEntity.collection = collectionAddress;
-    approvedForAllEntity.account = owner;
+  if (
+    event.address.toHexString() &&
+    event.params.owner.toHexString() &&
+    event.params.operator.toHexString()
+  ) {
+    let collectionAddress = event.address.toHexString();
+    let owner = event.params.owner.toHexString();
+    let operator = event.params.operator.toHexString();
+    let approvedID = "approvedforall/".concat(collectionAddress).concat(owner);
+    let approvedForAllEntity = ApprovedForAll.load(approvedID);
+    if (approvedForAllEntity == null) {
+      approvedForAllEntity = new ApprovedForAll(approvedID);
+      approvedForAllEntity.id = approvedID;
+      approvedForAllEntity.collection = collectionAddress;
+      approvedForAllEntity.account = owner;
+      approvedForAllEntity.save();
+    }
+    if (operator == constants.Marketplace && event.params.approved == true) {
+      approvedForAllEntity.approved = true;
+    } else {
+      approvedForAllEntity.approved = false;
+    }
     approvedForAllEntity.save();
   }
-  if (operator == constants.Marketplace && event.params.approved == true) {
-    approvedForAllEntity.approved = true;
-  } else {
-    approvedForAllEntity.approved = false;
-  }
-  approvedForAllEntity.save();
 }

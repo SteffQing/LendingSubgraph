@@ -26,7 +26,7 @@ type ApprovedForAll @entity {
   account: account!
 
   " The approval status "
-  approved: Boolean!
+  approved: Boolean
 }
 
 type SaleInfo @entity {
@@ -86,6 +86,9 @@ type CollectionOffer @entity {
   " The total count of nfts the Offer creator is offering to buy "
   total: BigInt!
 
+  " The validity period of the offer "
+  validity: BigInt
+
   " The time the offer was created "
   blockTimestamp: BigInt!
 
@@ -109,6 +112,9 @@ type CollectionsTokenOffer @entity {
   " The offer amount/value "
   value: BigInt!
 
+  " The validity period of the offer "
+  validity: BigInt
+
   " The time the offer was created "
   blockTimestamp: BigInt!
 
@@ -129,16 +135,25 @@ type account @entity {
   tokens: [token!]! @derivedFrom(field: "owner")
 
   " The points earned by this account "
-  points: Int
+  points: Int!
+
+  " The total volume of sales for this account "
+  totalVolume: BigInt!
+
+  " The total sales for this account "
+  totalSales: Int!
+
+  " The total revenue generated for this account "
+  revenue: BigInt!
 
   " The transfers originating from this account "
-  transfersFrom: [transfer!]! @derivedFrom(field: "senderAddress")
+  transfersFrom: [transfer!] @derivedFrom(field: "senderAddress")
 
   " The transfers recevied by this account"
-  transfersTo: [transfer!]! @derivedFrom(field: "receiverAddress")
+  transfersTo: [transfer!] @derivedFrom(field: "receiverAddress")
 
   " M:M relationship for Accounts and Collections "
-  accountCollection: [accountCollection!]! @derivedFrom(field: "account")
+  accountCollection: [accountCollection!] @derivedFrom(field: "account")
 
   " Tokens on sale for account"
   saleInfo: [SaleInfo!] @derivedFrom(field: "seller")
@@ -167,6 +182,9 @@ type collection @entity {
   " Total Supply of Tokens "
   totalSupply: BigInt
 
+  " Total Value locked for offers "
+  TVL: BigInt!
+
   " Mint Price "
   mintPrice: BigDecimal
 
@@ -176,7 +194,7 @@ type collection @entity {
   " Tokens in the collection for sale"
   saleInfo: [SaleInfo!] @derivedFrom(field: "collection")
 
-  collectionoffers: [CollectionOffer!] @derivedFrom(field: "collection")
+  collectionOffers: [CollectionOffer!] @derivedFrom(field: "collection")
 
   " Collection supports metadata "
   supportsMetadata: Boolean

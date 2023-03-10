@@ -6,6 +6,7 @@ import {
   BidCreated as BidCreatedEvent,
 } from "../../generated/Auction/Auction";
 import { account, SaleInfo } from "../../generated/schema";
+import { fetchAccount } from "../utils/erc721";
 import { updateAuction } from "./auctionUtils";
 
 export function handleAuctionCancelled(event: AuctionCancelledEvent): void {
@@ -53,20 +54,14 @@ export function handleBidAccepted(event: BidAcceptedEvent): void {
     .concat(tokenId);
   let id = "saleinfo/".concat(tokenEntityId);
   updateAuction(event);
-  let sellerEntity = account.load(event.params.owner.toHex());
-  if (sellerEntity != null) {
-    if (!sellerEntity.points) {
-      sellerEntity.points = 0;
-    }
-    sellerEntity.points = sellerEntity.points + 10;
-  }
-  let bidderEntity = account.load(event.params.bidder.toHex());
-  if (bidderEntity != null) {
-    if (!bidderEntity.points) {
-      bidderEntity.points = 0;
-    }
-    bidderEntity.points = bidderEntity.points + 20;
-  }
+  let sellerEntity = fetchAccount(event.params.owner);
+  sellerEntity.points = sellerEntity.points + 10;
+  sellerEntity.save();
+
+  let bidderEntity = fetchAccount(event.params.bidder);
+  bidderEntity.points = bidderEntity.points + 20;
+  bidderEntity.save();
+
   store.remove("SaleInfo", id);
 }
 

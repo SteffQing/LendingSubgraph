@@ -26,6 +26,7 @@ export namespace constants {
   export const Marketplace = "0xe6b4c2a0640bbd797b3361f79708f1d373edff30";
   export const OfferHouse = "0x51f349056f7c4d234e60e3b347a12b9ad5f84c17";
   export const Auction = "0xc97f99411316c441fd4f524c02a78836fc075e1e";
+  export const WKCS = "0x69567cffe9918dbef4cd24b30fddce4c13389dcf";
 }
 
 export namespace transactions {
@@ -65,7 +66,7 @@ export namespace ERC20Contracts {
       currencyEntity.name = try_name.reverted
         ? "KuCoin Shares"
         : try_name.value;
-      currencyEntity.symbol = try_symbol.reverted ? "MATIC" : try_symbol.value;
+      currencyEntity.symbol = try_symbol.reverted ? "KCS" : try_symbol.value;
       currencyEntity.decimals = try_deicmals.reverted ? 18 : try_deicmals.value;
       currencyEntity.save();
     }
@@ -81,7 +82,7 @@ export namespace ERC20Contracts {
 
       currencyEntity = new currency(address.toHexString());
       currencyEntity.name = try_name.reverted ? "Wrapped KCS" : try_name.value;
-      currencyEntity.symbol = try_symbol.reverted ? "WETH" : try_symbol.value;
+      currencyEntity.symbol = try_symbol.reverted ? "WKCS" : try_symbol.value;
       currencyEntity.decimals = try_deicmals.reverted ? 18 : try_deicmals.value;
       currencyEntity.save();
     }

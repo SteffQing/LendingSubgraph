@@ -35,7 +35,12 @@ export function MatchTransferWithSale(
         transactionEntity.save();
 
         // Update symbols to KCS and WKCS in prod
-        if (CurrencySymbol == "MATIC" || CurrencySymbol == "WETH") {
+        if (
+          CurrencySymbol == "MATIC" ||
+          CurrencySymbol == "WETH" ||
+          CurrencySymbol == "KCS" ||
+          CurrencySymbol == "WKCS"
+        ) {
           // Update collection metrics
           let collectionEntity = collection.load(transferEntity.collection);
           if (collectionEntity) {
