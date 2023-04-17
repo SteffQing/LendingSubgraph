@@ -1,13 +1,13 @@
 {
-  "name": "foundationapptest",
+  "name": "lending",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ steffqing/foundationapptest",
-    "create-local": "graph create --node http://localhost:8020/ steffqing/foundationapptest",
-    "remove-local": "graph remove --node http://localhost:8020/ steffqing/foundationapptest",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 steffqing/foundationapptest",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ steffqing/lending",
+    "create-local": "graph create --node http://localhost:8020/ steffqing/lending",
+    "remove-local": "graph remove --node http://localhost:8020/ steffqing/lending",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 steffqing/lending",
     "test": "graph test"
   },
   "dependencies": {

@@ -60,7 +60,7 @@ export function fetchToken(
   id: BigInt,
   timestamp: BigInt
 ): token {
-  let tokenid = "kcc/".concat(collection.id.concat("/").concat(id.toString()));
+  let tokenid = "eth/".concat(collection.id.concat("/").concat(id.toString()));
   let tokenEntity = token.load(tokenid);
   let timeout = BigInt.fromI32(2592000);
   let lastUpdate = tokenEntity
@@ -90,8 +90,10 @@ export function fetchToken(
 }
 
 export function fetchAccount(address: Address): account {
-  let accountEntity = account.load(address.toHexString());
-  if (accountEntity == null) {
+  let addressAccount = address.toHexString();
+  let accountEntity = account.load(addressAccount);
+
+  if (accountEntity == null && addressAccount != constants.ADDRESS_ZERO) {
     accountEntity = new account(address.toHexString());
     accountEntity.points = 0;
     accountEntity.totalVolume = constants.BIGINT_ZERO;
