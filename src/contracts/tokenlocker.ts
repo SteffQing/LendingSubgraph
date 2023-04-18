@@ -9,31 +9,23 @@ import { lockId, lockedCollection } from "../../generated/schema";
 import { constants } from "../graphprotcol-utls";
 
 export function handleDeposit(event: DepositEvent): void {
-  const {
-    lockId: lockIdBytes,
-    lockPeriod,
-    collection,
-    tokenId,
-    user,
-    protocol,
-  } = event.params;
-  let entity = new lockId(lockIdBytes.toHexString());
-  entity.depositor = user.toHexString();
-  entity.protocol = protocol.toHexString();
+  let entity = new lockId(event.params.lockId.toHexString());
+  entity.depositor = event.params.user.toHexString();
+  entity.protocol = event.params.protocol.toHexString();
   entity.timestamp = event.block.timestamp.toI32();
-  entity.expires = lockPeriod.toI32();
+  entity.expires = event.params.lockPeriod.toI32();
   entity.status = "ACTIVE";
-  if (protocol.toHexString() !== constants.ADDRESS_ZERO) {
-    entity.contract = `${user.toHexString()}/${lockIdBytes.toHexString()}`;
+  if (event.params.protocol.toHexString() !== constants.ADDRESS_ZERO) {
+    entity.contract = `${event.params.user.toHexString()}/${event.params.lockId.toHexString()}`;
   } else {
     entity.contract = constants.ADDRESS_ZERO;
   }
-  let _lockedCollectionArray = entity.collections;
-  for (let i = 0; i < collection.length; i++) {
+  let _lockedCollectionArray: string[] = [];
+  for (let i = 0; i < event.params.collection.length; i++) {
     let _lockedCollection = loopCollections(
-      collection.toHexString(),
-      tokenId[i],
-      lockIdBytes.toHexString()
+      event.params.collection.toHexString(),
+      event.params.tokenId[i],
+      event.params.lockId.toHexString()
     );
     _lockedCollectionArray.push(_lockedCollection.id);
   }
@@ -44,9 +36,9 @@ export function handleDeposit(event: DepositEvent): void {
 export function loopCollections(
   collection: string,
   tokens: BigInt[],
-  lockIdBytes: string
+  lockId: string
 ): lockedCollection {
-  let collectionEntity = new lockedCollection(`${lockIdBytes}/${collection}`);
+  let collectionEntity = new lockedCollection(`${lockId}/${collection}`);
   collectionEntity.collection = collection;
   let collectionTokens = tokens.length;
   for (let j = 0; j < collectionTokens; j++) {
@@ -61,8 +53,7 @@ export function loopCollections(
 }
 
 export function handleWithdrawal(event: WithdrawEvent): void {
-  const { lockId: lockIdBytes } = event.params;
-  let entity = lockId.load(lockIdBytes.toHexString());
+  let entity = lockId.load(event.params.lockId.toHexString());
   if (entity) {
     entity.status = "UNLOCKED";
     entity.save();
@@ -70,8 +61,7 @@ export function handleWithdrawal(event: WithdrawEvent): void {
 }
 
 export function handleTokensClaim(event: ClaimTokensEvent): void {
-  const { lockId: lockIdBytes } = event.params;
-  let entity = lockId.load(lockIdBytes.toHexString());
+  let entity = lockId.load(event.params.lockId.toHexString());
   if (entity) {
     entity.status = "LIQUIDATED";
     entity.save();
@@ -79,8 +69,7 @@ export function handleTokensClaim(event: ClaimTokensEvent): void {
 }
 
 export function handleLiquidation(event: LiquidateEvent): void {
-  const { lockId: lockIdBytes } = event.params;
-  let entity = lockId.load(lockIdBytes.toHexString());
+  let entity = lockId.load(event.params.lockId.toHexString());
   if (entity) {
     entity.status = "LIQUIDATED";
     entity.save();

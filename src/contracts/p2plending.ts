@@ -15,48 +15,38 @@ import { updateProtocol, updateProtocolParameters } from "./main";
 import { fetchAccount } from "../utils/erc721";
 
 export function handleContractOpened(event: ContractOpenedEvent): void {
-  const { borrower, amount, interest, lockId, expiry } = event.params;
   let entity = new p2pContract(
-    `${borrower.toHexString()}/${lockId.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}`
   );
-  entity.borrower = borrower.toHexString();
+  entity.borrower = event.params.borrower.toHexString();
   entity.lender = constants.ADDRESS_ZERO;
-  entity.amount = amount;
-  entity.interest = interest;
+  entity.amount = event.params.amount;
+  entity.interest = event.params.interest;
   entity.status = "PENDING";
-  entity.lockId = lockId.toHexString();
-  entity.expiry = expiry;
+  entity.lockId = event.params.lockId.toHexString();
+  entity.expiry = event.params.expiry;
   entity.timestamp = event.block.timestamp.toI32();
   entity.save();
 }
 
 export function handleContractActive(event: ContractActiveEvent): void {
-  const {
-    borrower,
-    lender,
-    interest,
-    expiry,
-    checkPointBlock,
-    lockId,
-  } = event.params;
   let entity = p2pContract.load(
-    `${borrower.toHexString()}/${lockId.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}`
   );
   if (entity != null) {
-    entity.lender = lender.toHexString();
+    entity.lender = event.params.lender.toHexString();
     entity.status = "ACTIVE";
-    entity.interest = interest;
-    entity.expiry = expiry;
-    entity.checkPointBlock = checkPointBlock;
+    entity.interest = event.params.interest;
+    entity.expiry = event.params.expiry;
+    entity.checkPointBlock = event.params.checkPointBlock;
     updateProtocol(constants.P2P, entity.amount, constants.BIGINT_ZERO);
     entity.save();
   }
 }
 
 export function handleContractClosed(event: ContractClosedEvent): void {
-  const { borrower, lockId } = event.params;
   let entity = p2pContract.load(
-    `${borrower.toHexString()}/${lockId.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}`
   );
   if (entity != null) {
     entity.status = "CLOSED";
@@ -65,9 +55,8 @@ export function handleContractClosed(event: ContractClosedEvent): void {
 }
 
 export function handleLiquidation(event: LiquidateEvent): void {
-  const { borrower, lockId } = event.params;
   let entity = p2pContract.load(
-    `${borrower.toHexString()}/${lockId.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}`
   );
   if (entity != null) {
     entity.status = "CLOSED";
@@ -76,37 +65,40 @@ export function handleLiquidation(event: LiquidateEvent): void {
 }
 
 export function handleLoanRepaid(event: LoanRepaidEvent): void {
-  const { borrower, repaidInterest, lockId } = event.params;
   let entity = p2pContract.load(
-    `${borrower.toHexString()}/${lockId.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}`
   );
   if (entity != null) {
     entity.status = "CLOSED";
-    updateProtocol(constants.P2P, constants.BIGINT_ZERO, repaidInterest);
+    updateProtocol(
+      constants.P2P,
+      constants.BIGINT_ZERO,
+      event.params.repaidInterest
+    );
     entity.save();
   }
 }
 
 export function handleNewBid(event: BidOpenedEvent): void {
-  const { borrower, lockId, bidder, proposedInterest } = event.params;
   let entity = new p2pBid(
-    `${borrower.toHexString()}/${lockId.toHexString()}/${bidder.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}/${event.params.bidder.toHexString()}`
   );
-  entity.bidder = bidder.toHexString();
-  entity.proposedInterest = proposedInterest;
+  entity.bidder = event.params.bidder.toHexString();
+  entity.proposedInterest = event.params.proposedInterest;
   entity.timestamp = event.block.timestamp.toI32();
-  entity.contract = `${borrower.toHexString()}/${lockId.toHexString()}`;
+  entity.contract = `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}`;
   entity.status = "PENDING";
   entity.save();
 }
 
 export function handleLostBid(event: LostBidEvent): void {
-  const { borrower, lockId, bidder, amount } = event.params;
   let entity = p2pBid.load(
-    `${borrower.toHexString()}/${lockId.toHexString()}/${bidder.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}/${event.params.bidder.toHexString()}`
   );
-  let accountEntity = fetchAccount(bidder);
-  accountEntity.withdrawableBid = accountEntity.withdrawableBid.plus(amount);
+  let accountEntity = fetchAccount(event.params.bidder);
+  accountEntity.withdrawableBid = accountEntity.withdrawableBid.plus(
+    event.params.amount
+  );
   accountEntity.save();
   if (entity != null) {
     entity.status = "REJECTED";
@@ -115,9 +107,8 @@ export function handleLostBid(event: LostBidEvent): void {
 }
 
 export function handleCancelledBid(event: BidClosedEvent): void {
-  const { borrower, lockId, bidder } = event.params;
   let entity = p2pBid.load(
-    `${borrower.toHexString()}/${lockId.toHexString()}/${bidder.toHexString()}`
+    `${event.params.borrower.toHexString()}/${event.params.lockId.toHexString()}/${event.params.bidder.toHexString()}`
   );
   2;
   if (entity != null) {
@@ -127,8 +118,11 @@ export function handleCancelledBid(event: BidClosedEvent): void {
 }
 
 export function handleContractUpdate(event: ContractUpdateEvent): void {
-  const { securityFee, protocolFee } = event.params;
-  updateProtocolParameters(constants.P2P, securityFee, protocolFee);
+  updateProtocolParameters(
+    constants.P2P,
+    event.params.securityFee,
+    event.params.protocolFee
+  );
 }
 
 // Path: src\contracts\p2plending.ts

@@ -23,11 +23,10 @@ export function handleCollectionRemoval(event: CollectionRemovedEvent): void {
   }
 }
 export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
-  const { name, protocol, securityFee, protocolFee } = event.params;
-  let entity = new Protocol(protocol.toHexString());
-  entity.name = name;
-  entity.protocolFee = protocolFee;
-  entity.securityFee = securityFee;
+  let entity = new Protocol(event.params.protocol.toHexString());
+  entity.name = event.params.name;
+  entity.protocolFee = event.params.protocolFee;
+  entity.securityFee = event.params.securityFee;
   entity.totalBorrows = constants.BIGINT_ZERO;
   entity.totalPaidInterest = constants.BIGINT_ZERO;
 }
@@ -52,8 +51,8 @@ export function updateProtocolParameters(
 ): void {
   let entity = Protocol.load(protocol);
   if (entity) {
-    entity.securityFee = securityFee;
-    entity.protocolFee = protocolFee;
+    entity.securityFee = securityFee as i32;
+    entity.protocolFee = protocolFee as i32;
     entity.save();
   }
 }

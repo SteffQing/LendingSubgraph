@@ -7,7 +7,7 @@ dataSources:
     network: mumbai
     source:
       abi: IERC721
-      startBlock: 34502400
+      startBlock: 34543429
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -37,7 +37,7 @@ dataSources:
     source:
       address: "0xdd0C76099b5BdA359A94e3A098c2D1a23EFBa6f8"
       abi: Main
-      startBlock: 34502400
+      startBlock: 34543429
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -62,7 +62,7 @@ dataSources:
     source:
       address: "0xC2598051b5DA1eb79D0a4f76966D83eF847Ad96e"
       abi: TokenLocker
-      startBlock: 34502400
+      startBlock: 34543429
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -89,7 +89,7 @@ dataSources:
     source:
       address: "0xce2C1f71934B45c50CBC4a7aABF9B1C152CFA0Ab"
       abi: P2PLending
-      startBlock: 34502400
+      startBlock: 34543429
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

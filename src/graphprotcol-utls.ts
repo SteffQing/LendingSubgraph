@@ -20,10 +20,10 @@ export namespace constants {
   export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
   export const BYTES32_ZERO =
     "0x0000000000000000000000000000000000000000000000000000000000000000";
-  export const Main = "0xdd0C76099b5BdA359A94e3A098c2D1a23EFBa6f8";
-  export const WETH = "0x69567CfFE9918dBeF4cD24b30FDdce4c13389Dcf";
-  export const TokenLocker = "0xC2598051b5DA1eb79D0a4f76966D83eF847Ad96e";
-  export const P2P = "0xce2C1f71934B45c50CBC4a7aABF9B1C152CFA0Ab";
+  export const WETH = "0x69567cffe9918dbef4cd24b30fddce4c13389dcf";
+  export const Main = "0x433f331949eec0b3a9fe26bdd8951635976f80db";
+  export const TokenLocker = "0x4cb36c444073ccb312ca0db983854b87d3a6f4b2";
+  export const P2P = "0x2758ce959bca6987df6126020eb624b124d3c27c";
 }
 
 export namespace transactions {
