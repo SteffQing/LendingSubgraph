@@ -89,7 +89,6 @@ export function handleTransfer(event: TransferEvent): void {
     transferEntity.receiverAddress = receiverAddress.id;
     transferEntity.blockNumber = event.block.number.toI32();
     transferEntity.timestamp = event.block.timestamp.toI32();
-    transferEntity.amount = constants.BIGDECIMAL_ZERO;
     transferEntity.save();
 
     let tx = transaction.load(event.transaction.hash.toHexString());
@@ -97,8 +96,6 @@ export function handleTransfer(event: TransferEvent): void {
       let transferArray = tx.transfers;
       transferArray.push(transferEntity.id);
 
-      let newTransferCount = tx.unmatchedTransferCount + 1;
-      tx.unmatchedTransferCount = newTransferCount;
       tx.transfers = transferArray;
       tx.save();
     }

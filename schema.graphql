@@ -29,6 +29,21 @@ type account @entity {
 
   " M:M relationship for Accounts and Collections "
   accountCollection: [accountCollection!] @derivedFrom(field: "account")
+
+  " withdrawable bids from failed bid "
+  withdrawableBid: BigInt!
+
+  " locked nfts "
+  lockedIds: [lockId!] @derivedFrom(field: "depositor")
+
+  " p2pContract bids "
+  bids: [p2pBid!] @derivedFrom(field: "bidder")
+
+  " p2pContract as a borrower "
+  borrows: [p2pContract!] @derivedFrom(field: "borrower")
+
+  " p2pContract as a lender "
+  lends: [p2pContract!] @derivedFrom(field: "lender")
 }
 
 type collection @entity {
@@ -58,7 +73,7 @@ type collection @entity {
 }
 
 type token @entity {
-  " kcc / Collection Addrress - Token Id "
+  " eth / Collection Addrress - Token Id "
   id: ID!
 
   " The collection address "
@@ -141,6 +156,103 @@ type transfer @entity {
 
   " Block Number "
   blockNumber: Int!
+}
+
+type protocol @entity {
+  " The protocol contract address "
+  id: ID!
+
+  " The protocol name "
+  name: String!
+
+  " The tokens locked by this protocol "
+  lockedIds: [lockId!]! @derivedFrom(field: "protocol")
+
+  " The protocol fee "
+  protocolFee: BigDecimal!
+
+  " The security fee "
+  securityFee: BigDecimal!
+}
+
+type lockId @entity {
+  " The lock id in bytes "
+  id: ID!
+
+  " The array of collections that are locked "
+  collections: [lockedCollection!]!
+
+  " The address that locked the collections "
+  depositor: account!
+
+  " The protocol that locked the collections "
+  protocol: protocol!
+
+  " The timestamp of when the lock was created "
+  timestamp: Int!
+
+  " The timestamp of when the lock expires "
+  expires: Int!
+
+  " the contract it was opened for "
+  contract: p2pContract
+}
+
+type lockedCollection @entity {
+  " the lock id in bytes - the collection address "
+  id: ID!
+
+  " The collection details "
+  collection: collection!
+
+  " An array of token entity of this collection that was locked "
+  tokens: [token!]!
+}
+
+type p2pContract @entity {
+  " The p2p contract address - borrower address"
+  id: ID!
+
+  " The borrower address "
+  borrower: account!
+
+  " The lender address "
+  lender: account!
+
+  " The interest/apr to be paid "
+  interest: Int!
+
+  " The amount borrowed "
+  amount: BigDecimal!
+
+  " The loan expiry date "
+  expiry: Int!
+
+  " the lockId of the tokens locked for the loan "
+  lockId: lockId! @derivedFrom(field: "contract")
+
+  " The timestamp of when the loan was created "
+  timestamp: Int!
+
+  " Bids made to this contract "
+  bids: [p2pBid!] @derivedFrom(field: "contract")
+}
+
+type p2pBid @entity {
+  " The p2p contract address - the borrower address - the bidder address "
+  id: ID!
+
+  " bidder address "
+  bidder: account!
+
+  " borrower address "
+  borrower: account!
+
+  " proposed interest "
+  proposedInterest: Int!
+
+  " p2pContract bidding for "
+  contract: p2pContract!
 }
 
 type _Schema_

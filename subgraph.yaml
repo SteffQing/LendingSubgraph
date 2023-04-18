@@ -65,15 +65,20 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - supportedCollection
+        - LockedTokens
+        - lockId
       abis:
         - name: TokenLocker
           file: ./abis/TokenLocker.json
       eventHandlers:
-        - event: CollectionAdded(indexed address)
-          handler: handleCollectionAddition
-        - event: CollectionRemoved(indexed address)
-          handler: handleCollectionRemoval
+        - event: ClaimTokens(indexed address,indexed address,bytes32)
+          handler: handleTokensClaim
+        - event: Deposit(indexed address,indexed address,indexed address[],uint256[][],uint256,bytes32)
+          handler: handleDeposit
+        - event: Liquidate(indexed address,indexed address,indexed address,bytes32)
+          handler: handleLiquidation
+        - event: Withdraw(indexed address,indexed address,indexed bytes32)
+          handler: handleWithdrawal
       file: ./src/contracts/tokenlocker.ts
   - kind: ethereum
     name: P2PLending
@@ -87,15 +92,28 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - supportedCollection
+        - LendingContract
+        - Bids
       abis:
         - name: P2PLending
           file: ./abis/P2PLending.json
       eventHandlers:
-        - event: CollectionAdded(indexed address)
-          handler: handleCollectionAddition
-        - event: CollectionRemoved(indexed address)
-          handler: handleCollectionRemoval
+        - event: BidClosed(indexed address,indexed address)
+          handler: handleCancelledBid
+        - event: BidOpened(indexed address,indexed address,indexed uint256)
+          handler: handleNewBid
+        - event: ContractActive(indexed address,indexed address,indexed uint256,uint256,uint256)
+          handler: handleActiveContract
+        - event: ContractClosed(indexed address,bytes32)
+          handler: handleCancelledContract
+        - event: ContractOpened(indexed address,indexed uint256,indexed uint256,uint256,bytes32)
+          handler: handleNewContract
+        - event: Liquidate(indexed address,indexed address,bytes32)
+          handler: handleLiquidation
+        - event: LoanRepaid(indexed address,indexed address,uint256,uint256)
+          handler: handleLoansRepaid
+        - event: LostBid(indexed address,indexed address,indexed uint256)
+          handler: handleLostBid
       file: ./src/contracts/p2plending.ts
 features:
   - fullTextSearch

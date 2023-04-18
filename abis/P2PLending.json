@@ -3,19 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_bidder",
-        "type": "address"
-      }
-    ],
-    "name": "acceptBid",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_TokenLocker",
         "type": "address"
       },
@@ -32,19 +19,6 @@
     "inputs": [],
     "name": "ActiveLoan",
     "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "cancelBid",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -132,13 +106,6 @@
     ],
     "name": "BidOpened",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "closeContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "anonymous": false,
@@ -262,45 +229,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "bidder",
-        "type": "address"
-      }
-    ],
-    "name": "InvalidBidder",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "lend",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "liquidate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "borrower",
@@ -311,6 +239,12 @@
         "internalType": "address",
         "name": "lender",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "lockId",
+        "type": "bytes32"
       }
     ],
     "name": "Liquidate",
@@ -373,64 +307,6 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_proposedInterest",
-        "type": "uint256"
-      }
-    ],
-    "name": "openBid",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "_collections",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[][]",
-        "name": "_tokenId",
-        "type": "uint256[][]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_expiry",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_interest",
-        "type": "uint256"
-      }
-    ],
-    "name": "openContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -442,56 +318,6 @@
     ],
     "name": "Paused",
     "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_collection",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "recoverNFT",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "recoverToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "repayLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "anonymous": false,
@@ -510,11 +336,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_admin",
+        "name": "_bidder",
         "type": "address"
       }
     ],
-    "name": "updateAdmin",
+    "name": "acceptBid",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -522,35 +348,19 @@
   {
     "inputs": [
       {
-        "internalType": "uint8",
-        "name": "_min",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_max",
-        "type": "uint8"
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
       }
     ],
-    "name": "updateExpiryDays",
+    "name": "cancelBid",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint8",
-        "name": "_secFee",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_protFee",
-        "type": "uint8"
-      }
-    ],
-    "name": "updateFee",
+    "inputs": [],
+    "name": "closeContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -637,6 +447,90 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "lend",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "liquidate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_proposedInterest",
+        "type": "uint256"
+      }
+    ],
+    "name": "openBid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_collections",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[][]",
+        "name": "_tokenId",
+        "type": "uint256[][]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_expiry",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_interest",
+        "type": "uint256"
+      }
+    ],
+    "name": "openContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "paused",
     "outputs": [
@@ -647,6 +541,105 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "recoverNFT",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "recoverToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "repayLoan",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "name": "updateAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_min",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_max",
+        "type": "uint8"
+      }
+    ],
+    "name": "updateExpiryDays",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_secFee",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_protFee",
+        "type": "uint8"
+      }
+    ],
+    "name": "updateFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
