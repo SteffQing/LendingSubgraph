@@ -158,7 +158,7 @@ type transfer @entity {
   blockNumber: Int!
 }
 
-type protocol @entity {
+type Protocol @entity {
   " The protocol contract address "
   id: ID!
 
@@ -166,7 +166,7 @@ type protocol @entity {
   name: String!
 
   " The tokens locked by this protocol "
-  lockedIds: [lockId!]! @derivedFrom(field: "protocol")
+  lockedIds: [lockId!] @derivedFrom(field: "protocol")
 
   " The protocol fee "
   protocolFee: BigDecimal!
@@ -186,7 +186,7 @@ type lockId @entity {
   depositor: account!
 
   " The protocol that locked the collections "
-  protocol: protocol!
+  protocol: Protocol!
 
   " The timestamp of when the lock was created "
   timestamp: Int!

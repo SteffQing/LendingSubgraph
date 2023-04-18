@@ -43,7 +43,8 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - supportedCollection
+        - SupportedCollection
+        - Protoocol
       abis:
         - name: Main
           file: ./abis/Main.json
@@ -52,6 +53,8 @@ dataSources:
           handler: handleCollectionAddition
         - event: CollectionRemoved(indexed address)
           handler: handleCollectionRemoval
+        - event: ProtocolCreated(address,string,uint8,uint8)
+          handler: handleProtocolCreation
       file: ./src/contracts/main.ts
   - kind: ethereum
     name: TokenLocker
