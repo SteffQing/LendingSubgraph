@@ -47,10 +47,6 @@ export function fetchRegistry(address: Address): collection {
     collectionEntity.symbol = try_symbol.reverted ? "" : try_symbol.value;
     collectionEntity.mintPrice = mintPrice;
     collectionEntity.supportsMetadata = supportsInterface(erc721, "5b5e139f"); // ERC721Metadata
-    collectionEntity.totalSales = 0;
-    collectionEntity.totalVolume = constants.BIGDECIMAL_ZERO;
-    collectionEntity.topSale = constants.BIGDECIMAL_ZERO;
-    collectionEntity.TVL = constants.BIGINT_ZERO;
   }
   return collectionEntity as collection;
 }
@@ -95,10 +91,8 @@ export function fetchAccount(address: Address): account {
 
   if (accountEntity == null && addressAccount != constants.ADDRESS_ZERO) {
     accountEntity = new account(address.toHexString());
-    accountEntity.points = 0;
-    accountEntity.totalVolume = constants.BIGINT_ZERO;
+    accountEntity.withdrawableBid = constants.BIGINT_ZERO;
     accountEntity.revenue = constants.BIGINT_ZERO;
-    accountEntity.totalSales = 0;
 
     accountEntity.save();
   }

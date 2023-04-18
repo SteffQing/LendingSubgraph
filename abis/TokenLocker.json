@@ -19,18 +19,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "recepient",
-        "type": "address"
-      },
-      {
         "indexed": false,
         "internalType": "bytes32",
         "name": "lockId",
@@ -87,24 +75,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "liquidated",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "liquidator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
-      },
-      {
         "indexed": false,
         "internalType": "bytes32",
         "name": "lockId",
@@ -143,18 +113,6 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "recepient",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "protocol",
-        "type": "address"
-      },
       {
         "indexed": true,
         "internalType": "bytes32",

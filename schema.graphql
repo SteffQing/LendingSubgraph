@@ -1,3 +1,22 @@
+enum Status {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum LockStatus {
+  ACTIVE
+  LIQUIDATED
+  UNLOCKED
+}
+
 type SupportedCollection @entity {
   " the ID is supportedcollection and collection address "
   id: ID!
@@ -169,10 +188,16 @@ type Protocol @entity {
   lockedIds: [lockId!] @derivedFrom(field: "protocol")
 
   " The protocol fee "
-  protocolFee: BigDecimal!
+  protocolFee: Int!
 
   " The security fee "
-  securityFee: BigDecimal!
+  securityFee: Int!
+
+  " total borrows "
+  totalBorrows: BigInt!
+
+  " interest paid by borrowers "
+  totalPaidInterest: BigInt!
 }
 
 type lockId @entity {
@@ -195,7 +220,10 @@ type lockId @entity {
   expires: Int!
 
   " the contract it was opened for "
-  contract: p2pContract
+  contract: p2pContract!
+
+  " the lock status "
+  status: LockStatus!
 }
 
 type lockedCollection @entity {
@@ -210,7 +238,7 @@ type lockedCollection @entity {
 }
 
 type p2pContract @entity {
-  " The p2p contract address - borrower address"
+  " The borrower address - the lockId"
   id: ID!
 
   " The borrower address "
@@ -220,13 +248,19 @@ type p2pContract @entity {
   lender: account!
 
   " The interest/apr to be paid "
-  interest: Int!
+  interest: BigInt!
 
   " The amount borrowed "
-  amount: BigDecimal!
+  amount: BigInt!
 
-  " The loan expiry date "
-  expiry: Int!
+  " The loan expiry date. changes from days count to unix period when active "
+  expiry: BigInt!
+
+  " The start block of the loan "
+  checkPointBlock: BigInt!
+
+  " state of the loan "
+  status: Status!
 
   " the lockId of the tokens locked for the loan "
   lockId: lockId! @derivedFrom(field: "contract")
@@ -239,20 +273,23 @@ type p2pContract @entity {
 }
 
 type p2pBid @entity {
-  " The p2p contract address - the borrower address - the bidder address "
+  " The borrower address - lockId - the bidder address "
   id: ID!
 
   " bidder address "
   bidder: account!
 
-  " borrower address "
-  borrower: account!
-
   " proposed interest "
-  proposedInterest: Int!
+  proposedInterest: BigInt!
 
   " p2pContract bidding for "
   contract: p2pContract!
+
+  " the timestamp of when the bid was made "
+  timestamp: Int!
+
+  " the bid status "
+  status: BidStatus!
 }
 
 type _Schema_

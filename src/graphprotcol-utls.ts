@@ -1,8 +1,6 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
 
-import { ERC20Abi } from "../generated/WETH/ERC20Abi";
-
 import { transaction } from "../generated/schema";
 
 export namespace events {
@@ -35,7 +33,6 @@ export namespace transactions {
       tx = new transaction(event.transaction.hash.toHexString());
       tx.timestamp = event.block.timestamp.toI32();
       tx.blockNumber = event.block.number.toI32();
-      tx.unmatchedTransferCount = 0;
       tx.gasPrice = event.transaction.gasPrice;
       tx.transactionFrom = event.transaction.from;
       tx.transfers = new Array<string>();
