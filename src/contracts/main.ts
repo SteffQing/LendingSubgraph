@@ -1,4 +1,4 @@
-import { BigInt, store } from "@graphprotocol/graph-ts";
+import { BigInt, store, log } from "@graphprotocol/graph-ts";
 import {
   CollectionAdded as CollectionAddedEvent,
   CollectionRemoved as CollectionRemovedEvent,
@@ -22,11 +22,15 @@ export function handleCollectionRemoval(event: CollectionRemovedEvent): void {
     store.remove("SupportedCollection", entity.id);
   }
 }
+
 export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
+  log.warning("ProtocolCreatedEvent: {}", [
+    event.params.protocol.toHexString(),
+  ]);
   let entity = new Protocol(event.params.protocol.toHexString());
   entity.name = event.params.name;
-  entity.protocolFee = event.params.protocolFee;
-  entity.securityFee = event.params.securityFee;
+  entity.protocolFee = event.params.protocolFee as i32;
+  entity.securityFee = event.params.securityFee as i32;
   entity.totalBorrows = constants.BIGINT_ZERO;
   entity.totalPaidInterest = constants.BIGINT_ZERO;
 }
