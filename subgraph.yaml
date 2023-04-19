@@ -26,10 +26,6 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
       file: ./src/eip721/index.ts
   - kind: ethereum
     name: MainContract
@@ -44,7 +40,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - SupportedCollection
-        - Protoocol
+        - Protocol
       abis:
         - name: Main
           file: ./abis/Main.json
