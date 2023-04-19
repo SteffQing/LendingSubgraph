@@ -35,7 +35,7 @@ dataSources:
     name: MainContract
     network: mumbai
     source:
-      address: "0xdd0C76099b5BdA359A94e3A098c2D1a23EFBa6f8"
+      address: "0x433f331949eec0b3a9fe26bdd8951635976f80db"
       abi: Main
       startBlock: 34543429
     mapping:
@@ -60,7 +60,7 @@ dataSources:
     name: TokenLocker
     network: mumbai
     source:
-      address: "0xC2598051b5DA1eb79D0a4f76966D83eF847Ad96e"
+      address: "0xd6f4c470cc593e314845b7bc1ead18f241b2f25e"
       abi: TokenLocker
       startBlock: 34543429
     mapping:
@@ -87,7 +87,7 @@ dataSources:
     name: P2PLending
     network: mumbai
     source:
-      address: "0xce2C1f71934B45c50CBC4a7aABF9B1C152CFA0Ab"
+      address: "0x0378daec0a39aef0978f20c517a5523f2dab1c8a"
       abi: P2PLending
       startBlock: 34543429
     mapping:
