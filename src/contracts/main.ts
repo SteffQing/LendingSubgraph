@@ -24,15 +24,14 @@ export function handleCollectionRemoval(event: CollectionRemovedEvent): void {
 }
 
 export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
-  log.warning("ProtocolCreatedEvent: {}", [
-    event.params.protocol.toHexString(),
-  ]);
-  let entity = new Protocol(event.params.protocol.toHexString());
+  let protocol = event.params.protocol.toHexString();
+  let entity = new Protocol(protocol);
   entity.name = event.params.name;
-  entity.protocolFee = event.params.protocolFee as i32;
-  entity.securityFee = event.params.securityFee as i32;
+  entity.protocolFee = event.params.protocolFee;
+  entity.securityFee = event.params.securityFee;
   entity.totalBorrows = constants.BIGINT_ZERO;
   entity.totalPaidInterest = constants.BIGINT_ZERO;
+  entity.save();
 }
 
 export function updateProtocol(
