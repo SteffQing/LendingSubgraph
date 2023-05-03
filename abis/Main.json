@@ -1,5 +1,46 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
+    ],
+    "name": "addCollection",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_protocol",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_protocolFee",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_securityFee",
+        "type": "uint8"
+      }
+    ],
+    "name": "addProtocol",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -42,7 +83,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "protocol",
         "type": "address"
@@ -70,6 +111,19 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
+    ],
+    "name": "removeCollection",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -83,44 +137,16 @@
     "type": "event"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_collection",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "addCollection",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_protocol",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_protocolFee",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_securityFee",
-        "type": "uint8"
-      }
-    ],
-    "name": "addProtocol",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -166,19 +192,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_collection",
-        "type": "address"
-      }
-    ],
-    "name": "removeCollection",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

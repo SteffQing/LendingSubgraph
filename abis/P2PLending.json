@@ -28,20 +28,25 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
       }
     ],
     "name": "ContractInstanceInactive",
     "type": "error"
   },
   {
+    "inputs": [],
+    "name": "InactiveLoan",
+    "type": "error"
+  },
+  {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "invalidInterest",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "InvalidInterest",
@@ -50,9 +55,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "invalidPeriod",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "name": "InvalidPeriod",
@@ -68,21 +73,15 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
       },
       {
         "indexed": true,
         "internalType": "address",
         "name": "bidder",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
       }
     ],
     "name": "BidClosed",
@@ -93,9 +92,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -104,16 +103,10 @@
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "proposedInterest",
-        "type": "uint256"
-      },
-      {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
+        "internalType": "uint16",
+        "name": "proposedInterest",
+        "type": "uint16"
       }
     ],
     "name": "BidOpened",
@@ -124,9 +117,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -135,10 +128,10 @@
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "uint256",
+        "indexed": false,
+        "internalType": "uint16",
         "name": "interest",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
         "indexed": false,
@@ -151,12 +144,6 @@
         "internalType": "uint256",
         "name": "checkPointBlock",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
       }
     ],
     "name": "ContractActive",
@@ -167,14 +154,8 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "bytes32",
-        "name": "lockId",
+        "name": "id",
         "type": "bytes32"
       }
     ],
@@ -186,33 +167,39 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "borrower",
         "type": "address"
       },
       {
         "indexed": true,
+        "internalType": "bytes32",
+        "name": "lockId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
       },
       {
-        "indexed": true,
-        "internalType": "uint256",
+        "indexed": false,
+        "internalType": "uint16",
         "name": "interest",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
         "indexed": false,
         "internalType": "uint256",
         "name": "expiry",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
       }
     ],
     "name": "ContractOpened",
@@ -222,34 +209,9 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "securityFee",
-        "type": "uint8"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "protocolFee",
-        "type": "uint8"
-      }
-    ],
-    "name": "ContractUpdate",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "indexed": false,
         "internalType": "bytes32",
-        "name": "lockId",
+        "name": "id",
         "type": "bytes32"
       }
     ],
@@ -261,27 +223,15 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "lender",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
       },
       {
         "indexed": false,
         "internalType": "uint256",
         "name": "repaidInterest",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
       }
     ],
     "name": "LoanRepaid",
@@ -292,9 +242,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -303,16 +253,10 @@
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
       }
     ],
     "name": "LostBid",
@@ -345,11 +289,86 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "minInterest",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minBorrowAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateProtocolBorrowParameters",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "minExpiryDay",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "maxExpiryDay",
+        "type": "uint8"
+      }
+    ],
+    "name": "UpdateProtocolDateParameters",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "securityFee",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "protocolFee",
+        "type": "uint16"
+      }
+    ],
+    "name": "UpdateProtocolFees",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "TokenLocker",
+    "outputs": [
+      {
+        "internalType": "contract ITokenLocker",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
         "name": "_bidder",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "name": "acceptBid",
@@ -358,11 +377,73 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_user",
+        "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "aprDivider",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_proposedInterest",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "bidInETH",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_proposedInterest",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "bidInWETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "name": "cancelBid",
@@ -371,18 +452,37 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
     "name": "closeContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "generatedRevenue",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_borrower",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "name": "getInterest",
@@ -412,9 +512,9 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "name": "getUserLoanData",
@@ -461,12 +561,25 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
-    "name": "lend",
+    "name": "lendInETH",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "lendInWETH",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -474,9 +587,9 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "name": "liquidate",
@@ -485,34 +598,68 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "maxExpiryDay",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minBorrowAmount",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "_proposedInterest",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "openBid",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minExpiryDay",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minInterest",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_collections",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
       },
       {
-        "internalType": "uint256[][]",
-        "name": "_tokenId",
-        "type": "uint256[][]"
+        "internalType": "uint256[]",
+        "name": "_tokens",
+        "type": "uint256[]"
       },
       {
         "internalType": "uint256",
@@ -520,14 +667,14 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "_expiry",
-        "type": "uint256"
+        "type": "uint8"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "_interest",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "openContract",
@@ -550,6 +697,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolFee",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -592,10 +752,36 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
     "name": "repayLoan",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "repurposeRevenue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "securityFee",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -639,17 +825,42 @@
   {
     "inputs": [
       {
-        "internalType": "uint8",
-        "name": "_secFee",
-        "type": "uint8"
+        "internalType": "uint16",
+        "name": "_securityFee",
+        "type": "uint16"
       },
       {
-        "internalType": "uint8",
-        "name": "_protFee",
-        "type": "uint8"
+        "internalType": "uint16",
+        "name": "_protocolFee",
+        "type": "uint16"
       }
     ],
     "name": "updateFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_minInterest",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minBorrowAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateInterestAndMinBorrowAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawLostBids",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
