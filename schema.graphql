@@ -2,6 +2,8 @@ enum LoanStatus {
   PENDING
   ACTIVE
   CLOSED
+  LIQUIDATED
+  LOAN_REPAID
 }
 
 enum BidStatus {
@@ -50,7 +52,7 @@ type account @entity {
   accountCollection: [accountCollection!] @derivedFrom(field: "account")
 
   " withdrawable bids from failed bid "
-  withdrawableBid: BigInt
+  withdrawableBid: BigInt!
 
   " locked nfts "
   lockedIds: [lockId!] @derivedFrom(field: "depositor")
@@ -216,11 +218,8 @@ type lockId @entity {
   " The protocol that locked the collections "
   protocol: protocol!
 
-  " The timestamp of when the lock was created "
-  timestamp: Int!
-
   " The timestamp of when the lock expires "
-  expires: Int!
+  expires: BigInt!
 
   " the contract it was opened for "
   contract: loanContract
@@ -228,8 +227,8 @@ type lockId @entity {
   " the lock status "
   status: LockStatus!
 
-  " Block Number "
-  blockNumber: Int!
+  " Transaction hash in which the deposit event occured"
+  transaction: transaction!
 }
 
 type loanContract @entity {
@@ -243,7 +242,7 @@ type loanContract @entity {
   lender: account
 
   " The interest/apr to be paid "
-  interest: BigInt!
+  interest: Int!
 
   " The amount borrowed "
   amount: BigInt!
@@ -260,14 +259,11 @@ type loanContract @entity {
   " the lockId of the tokens locked for the loan "
   lockId: lockId! @derivedFrom(field: "contract")
 
-  " The timestamp of when the loan was created "
-  timestamp: Int!
-
   " Bids made to this contract "
   bids: [bid!] @derivedFrom(field: "contract")
 
-  " Block Number "
-  blockNumber: Int!
+  " Transaction hash in which the loanContractOpened event occured"
+  transaction: transaction!
 }
 
 type bid @entity {
@@ -278,13 +274,13 @@ type bid @entity {
   bidder: account!
 
   " proposed interest "
-  proposedInterest: BigInt!
+  proposedInterest: Int!
 
   " Contract bidding for "
   contract: loanContract!
 
-  " the timestamp of when the bid was made "
-  timestamp: Int!
+  " Transaction hash in which the transfer event occured"
+  transaction: transaction!
 
   " the bid status "
   status: BidStatus!
