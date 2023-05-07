@@ -11,7 +11,13 @@
     "type": "constructor"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      }
+    ],
     "name": "Unauthorized",
     "type": "error"
   },
@@ -19,18 +25,11 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "bytes32",
         "name": "lockId",
         "type": "bytes32"
-      }
-    ],
-    "name": "ClaimTokens",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+      },
       {
         "indexed": true,
         "internalType": "address",
@@ -44,7 +43,7 @@
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "collection",
         "type": "address"
@@ -52,7 +51,7 @@
       {
         "indexed": false,
         "internalType": "uint256[]",
-        "name": "tokenId",
+        "name": "tokens",
         "type": "uint256[]"
       },
       {
@@ -60,18 +59,6 @@
         "internalType": "uint256",
         "name": "lockPeriod",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "lockId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "mappingId",
-        "type": "bytes32"
       }
     ],
     "name": "Deposit",
@@ -85,6 +72,12 @@
         "internalType": "bytes32",
         "name": "lockId",
         "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
       }
     ],
     "name": "Liquidate",
@@ -159,25 +152,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "Protocols",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_protocol",
         "type": "address"
       }
@@ -204,29 +178,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_recipient",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_collection",
-        "type": "address"
-      }
-    ],
-    "name": "claimTokens",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_collection",
         "type": "address"
       },
@@ -242,7 +193,7 @@
       },
       {
         "internalType": "address",
-        "name": "_user",
+        "name": "_ownerOf",
         "type": "address"
       }
     ],
@@ -252,24 +203,66 @@
         "internalType": "bytes32",
         "name": "lockId",
         "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "mappingId",
-        "type": "bytes32"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getProtocolUsers",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "locker",
+        "type": "address"
+      }
+    ],
+    "name": "getLockedIds",
     "outputs": [
       {
-        "internalType": "address[]",
-        "name": "_users",
-        "type": "address[]"
+        "internalType": "bytes32[]",
+        "name": "_lockIds",
+        "type": "bytes32[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getLockedTokensData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "collection",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "tokens",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lockTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TokenLockerContract.LockedTokens",
+        "name": "lockTokens",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -292,12 +285,31 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_user",
+        "name": "",
         "type": "address"
+      }
+    ],
+    "name": "isProtocol",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_lockId",
+        "type": "bytes32"
       },
       {
         "internalType": "address",
-        "name": "_collection",
+        "name": "_recipient",
         "type": "address"
       }
     ],
@@ -357,13 +369,34 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_user",
+        "name": "_newAdmin",
         "type": "address"
-      },
+      }
+    ],
+    "name": "updateAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "address",
-        "name": "_collection",
+        "name": "_MainContract",
         "type": "address"
+      }
+    ],
+    "name": "updateMainContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_lockId",
+        "type": "bytes32"
       }
     ],
     "name": "withdraw",

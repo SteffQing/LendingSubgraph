@@ -62,7 +62,7 @@ export function fetchToken(
   let lastUpdate = tokenEntity
     ? tokenEntity.updatedAtTimestamp.plus(timeout)
     : BigInt.fromI32(0);
-  if (tokenEntity == null || lastUpdate.lt(timestamp)) {
+  if (tokenEntity == null) {
     let account_zero = new account(constants.ADDRESS_ZERO);
     account_zero.save();
 
@@ -82,6 +82,20 @@ export function fetchToken(
       ? BigInt.fromI32(0)
       : try_totalSupply.value;
   }
+  if (lastUpdate.lt(timestamp)) {
+    tokenEntity = token.load(tokenid);
+    //update collection's total supply
+    let Collection = Contract721.bind(Address.fromString(collection.id));
+    let try_totalSupply = Collection.try_totalSupply();
+    let tokenURI = Collection.try_tokenURI(id);
+    if (tokenEntity != null) {
+      tokenEntity.tokenURI = tokenURI.reverted ? "" : tokenURI.value;
+      tokenEntity.updatedAtTimestamp = timestamp;
+      collection.totalSupply = try_totalSupply.reverted
+        ? BigInt.fromI32(0)
+        : try_totalSupply.value;
+    }
+  }
   return tokenEntity as token;
 }
 
@@ -90,7 +104,7 @@ export function fetchAccount(address: Address): account {
   let accountEntity = account.load(addressAccount);
 
   if (accountEntity == null && addressAccount != constants.ADDRESS_ZERO) {
-    accountEntity = new account(address.toHexString());
+    accountEntity = new account(addressAccount);
     accountEntity.withdrawableBid = constants.BIGINT_ZERO;
     accountEntity.revenue = constants.BIGINT_ZERO;
 

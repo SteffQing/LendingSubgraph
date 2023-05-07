@@ -1,4 +1,4 @@
-enum Status {
+enum LoanStatus {
   PENDING
   ACTIVE
   CLOSED
@@ -55,14 +55,14 @@ type account @entity {
   " locked nfts "
   lockedIds: [lockId!] @derivedFrom(field: "depositor")
 
-  " p2pContract bids "
-  bids: [p2pBid!] @derivedFrom(field: "bidder")
+  " contract bids "
+  bids: [bid!] @derivedFrom(field: "bidder")
 
-  " p2pContract as a borrower "
-  borrows: [p2pContract!] @derivedFrom(field: "borrower")
+  " loanContract as a borrower "
+  borrows: [loanContract!] @derivedFrom(field: "borrower")
 
-  " p2pContract as a lender "
-  lends: [p2pContract!] @derivedFrom(field: "lender")
+  " loanContract as a lender "
+  lends: [loanContract!] @derivedFrom(field: "lender")
 }
 
 type collection @entity {
@@ -177,7 +177,7 @@ type transfer @entity {
   blockNumber: Int!
 }
 
-type Protocol @entity {
+type protocol @entity {
   " The protocol contract address "
   id: ID!
 
@@ -205,13 +205,16 @@ type lockId @entity {
   id: ID!
 
   " The array of collections that are locked "
-  collections: [lockedCollection!]!
+  collection: collection!
+
+  " An array of token entity of this collection that was locked "
+  tokens: [token!]!
 
   " The address that locked the collections "
   depositor: account!
 
   " The protocol that locked the collections "
-  protocol: Protocol!
+  protocol: protocol!
 
   " The timestamp of when the lock was created "
   timestamp: Int!
@@ -220,32 +223,24 @@ type lockId @entity {
   expires: Int!
 
   " the contract it was opened for "
-  contract: p2pContract!
+  contract: loanContract
 
   " the lock status "
   status: LockStatus!
+
+  " Block Number "
+  blockNumber: Int!
 }
 
-type lockedCollection @entity {
-  " the lock id in bytes - the collection address "
-  id: ID!
-
-  " The collection details "
-  collection: collection!
-
-  " An array of token entity of this collection that was locked "
-  tokens: [token!]!
-}
-
-type p2pContract @entity {
-  " The borrower address - the lockId"
+type loanContract @entity {
+  " the loanContract id in bytes"
   id: ID!
 
   " The borrower address "
   borrower: account!
 
   " The lender address "
-  lender: account!
+  lender: account
 
   " The interest/apr to be paid "
   interest: BigInt!
@@ -260,7 +255,7 @@ type p2pContract @entity {
   checkPointBlock: BigInt!
 
   " state of the loan "
-  status: Status!
+  status: LoanStatus!
 
   " the lockId of the tokens locked for the loan "
   lockId: lockId! @derivedFrom(field: "contract")
@@ -269,11 +264,14 @@ type p2pContract @entity {
   timestamp: Int!
 
   " Bids made to this contract "
-  bids: [p2pBid!] @derivedFrom(field: "contract")
+  bids: [bid!] @derivedFrom(field: "contract")
+
+  " Block Number "
+  blockNumber: Int!
 }
 
-type p2pBid @entity {
-  " The borrower address - lockId - the bidder address "
+type bid @entity {
+  " the loanContract id - the bidder address "
   id: ID!
 
   " bidder address "
@@ -282,8 +280,8 @@ type p2pBid @entity {
   " proposed interest "
   proposedInterest: BigInt!
 
-  " p2pContract bidding for "
-  contract: p2pContract!
+  " Contract bidding for "
+  contract: loanContract!
 
   " the timestamp of when the bid was made "
   timestamp: Int!

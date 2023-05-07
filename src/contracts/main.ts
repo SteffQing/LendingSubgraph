@@ -4,7 +4,7 @@ import {
   CollectionRemoved as CollectionRemovedEvent,
   ProtocolCreated as ProtocolCreatedEvent,
 } from "../../generated/MainContract/Main";
-import { SupportedCollection, Protocol } from "../../generated/schema";
+import { SupportedCollection, protocol } from "../../generated/schema";
 import { constants } from "../graphprotcol-utls";
 
 export function handleCollectionAddition(event: CollectionAddedEvent): void {
@@ -24,8 +24,8 @@ export function handleCollectionRemoval(event: CollectionRemovedEvent): void {
 }
 
 export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
-  let protocol = event.params.protocol.toHexString();
-  let entity = new Protocol(protocol);
+  let _protocol = event.params.protocol.toHexString();
+  let entity = new protocol(_protocol);
   entity.name = event.params.name;
   entity.protocolFee = event.params.protocolFee;
   entity.securityFee = event.params.securityFee;
@@ -35,11 +35,11 @@ export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
 }
 
 export function updateProtocol(
-  protocol: string,
+  _protocol: string,
   borrow: BigInt,
   interest: BigInt
 ): void {
-  let entity = Protocol.load(protocol);
+  let entity = protocol.load(_protocol);
   if (entity) {
     entity.totalBorrows = entity.totalBorrows.plus(borrow);
     entity.totalPaidInterest = entity.totalPaidInterest.plus(interest);
@@ -48,11 +48,11 @@ export function updateProtocol(
 }
 
 export function updateProtocolParameters(
-  protocol: string,
+  _protocol: string,
   securityFee: number,
   protocolFee: number
 ): void {
-  let entity = Protocol.load(protocol);
+  let entity = protocol.load(_protocol);
   if (entity) {
     entity.securityFee = securityFee as i32;
     entity.protocolFee = protocolFee as i32;

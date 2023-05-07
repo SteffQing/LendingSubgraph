@@ -7,7 +7,7 @@ dataSources:
     network: mumbai
     source:
       abi: IERC721
-      startBlock: 34543429
+      startBlock: 35260180
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -31,9 +31,9 @@ dataSources:
     name: MainContract
     network: mumbai
     source:
-      address: "0x433f331949eec0b3a9fe26bdd8951635976f80db"
+      address: "0x9628c124241d55a27e0a6a29ddd7f42df629b6d9"
       abi: Main
-      startBlock: 34543429
+      startBlock: 35260180
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -49,32 +49,29 @@ dataSources:
           handler: handleCollectionAddition
         - event: CollectionRemoved(indexed address)
           handler: handleCollectionRemoval
-        - event: ProtocolCreated(address,string,uint8,uint8)
+        - event: ProtocolCreated(indexed address,string,uint8,uint8)
           handler: handleProtocolCreation
       file: ./src/contracts/main.ts
   - kind: ethereum
     name: TokenLocker
     network: mumbai
     source:
-      address: "0xd6f4c470cc593e314845b7bc1ead18f241b2f25e"
+      address: "0x7349153dff33f393b619236e1bf63edd5e22a553"
       abi: TokenLocker
-      startBlock: 34543429
+      startBlock: 35260180
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - lockedCollection
         - lockId
       abis:
         - name: TokenLocker
           file: ./abis/TokenLocker.json
       eventHandlers:
-        - event: ClaimTokens(bytes32)
-          handler: handleTokensClaim
-        - event: Deposit(indexed address,indexed address,indexed address[],uint256[][],uint256,bytes32)
+        - event: Deposit(indexed bytes32,indexed address,indexed address,address,uint256[],uint256)
           handler: handleDeposit
-        - event: Liquidate(bytes32)
+        - event: Liquidate(bytes32,address)
           handler: handleLiquidation
         - event: Withdraw(indexed bytes32)
           handler: handleWithdrawal
@@ -83,9 +80,9 @@ dataSources:
     name: P2PLending
     network: mumbai
     source:
-      address: "0x0378daec0a39aef0978f20c517a5523f2dab1c8a"
+      address: "0xd5a4d38578bf1ac82535752028c20a985f206a6f"
       abi: P2PLending
-      startBlock: 34543429
+      startBlock: 35260180
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -97,22 +94,28 @@ dataSources:
         - name: P2PLending
           file: ./abis/P2PLending.json
       eventHandlers:
-        - event: BidClosed(indexed address,indexed address,bytes32)
+        - event: BidClosed(indexed bytes32,indexed address)
           handler: handleCancelledBid
-        - event: BidOpened(indexed address,indexed address,indexed uint256,bytes32)
+        - event: BidOpened(indexed bytes32,indexed address,uint16)
           handler: handleNewBid
-        - event: ContractActive(indexed address,indexed address,indexed uint256,uint256,uint256,bytes32)
+        - event: ContractActive(indexed bytes32,indexed address,uint16,uint256,uint256)
           handler: handleContractActive
-        - event: ContractClosed(indexed address,bytes32)
+        - event: ContractClosed(indexed bytes32)
           handler: handleContractClosed
-        - event: ContractOpened(indexed address,indexed uint256,indexed uint256,uint256,bytes32)
+        - event: ContractOpened(indexed bytes32,indexed address,indexed bytes32,uint256,uint16,uint256)
           handler: handleContractOpened
-        - event: Liquidate(indexed address,bytes32)
+        - event: Liquidate(indexed bytes32)
           handler: handleLiquidation
-        - event: LoanRepaid(indexed address,indexed address,uint256,bytes32)
+        - event: LoanRepaid(indexed bytes32,uint256)
           handler: handleLoansRepaid
-        - event: LostBid(indexed address,indexed address,indexed uint256,bytes32)
+        - event: LostBid(indexed bytes32,indexed address,uint256)
           handler: handleLostBid
+        - event: UpdateProtocolFees(uint16,uint16)
+          handler: handleProtocolFeeUpdate
+        - event: UpdateProtocolBorrowParameters(uint16,uint256)
+          handler: handleProtocolBorrowParameters
+        - event: UpdateProtocolDateParameters(uint8,uint8)
+          handler: handleProtocolDateParameters
       file: ./src/contracts/p2plending.ts
 features:
   - fullTextSearch

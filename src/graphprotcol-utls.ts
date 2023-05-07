@@ -21,9 +21,9 @@ export namespace constants {
   export const BYTES32_ZERO =
     "0x0000000000000000000000000000000000000000000000000000000000000000";
   export const WETH = "0x69567cffe9918dbef4cd24b30fddce4c13389dcf";
-  export const Main = "0x433f331949eec0b3a9fe26bdd8951635976f80db";
-  export const TokenLocker = "0xd6f4c470cc593e314845b7bc1ead18f241b2f25e";
-  export const P2P = "0x0378daec0a39aef0978f20c517a5523f2dab1c8a";
+  export const Main = "0x9628c124241d55a27e0a6a29ddd7f42df629b6d9";
+  export const TokenLocker = "0x7349153dff33f393b619236e1bf63edd5e22a553";
+  export const P2P = "0xd5a4d38578bf1ac82535752028c20a985f206a6f";
 }
 
 export namespace transactions {

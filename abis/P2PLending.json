@@ -16,13 +16,14 @@
     "type": "constructor"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
     "name": "ActiveLoan",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ContractInstanceActive",
     "type": "error"
   },
   {
@@ -33,11 +34,6 @@
         "type": "bytes32"
       }
     ],
-    "name": "ContractInstanceInactive",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "InactiveLoan",
     "type": "error"
   },
@@ -64,7 +60,35 @@
     "type": "error"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "LoanContractActive",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "LoanContractInactive",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      }
+    ],
     "name": "Unauthorized",
     "type": "error"
   },
@@ -390,19 +414,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "aprDivider",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint16",
@@ -465,19 +476,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "generatedRevenue",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -497,13 +495,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getProtocolUsers",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_borrower",
+        "type": "address"
+      }
+    ],
+    "name": "getUserActiveLoanIds",
     "outputs": [
       {
-        "internalType": "address[]",
-        "name": "_borrowers",
-        "type": "address[]"
+        "internalType": "bytes32[]",
+        "name": "ids",
+        "type": "bytes32[]"
       }
     ],
     "stateMutability": "view",
@@ -598,58 +602,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "maxExpiryDay",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "minBorrowAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "minExpiryDay",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "minInterest",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -663,17 +615,17 @@
       },
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_amountToBorrow",
         "type": "uint256"
       },
       {
         "internalType": "uint8",
-        "name": "_expiry",
+        "name": "_expiryInDays",
         "type": "uint8"
       },
       {
         "internalType": "uint16",
-        "name": "_interest",
+        "name": "_interestToPay",
         "type": "uint16"
       }
     ],
@@ -697,19 +649,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "protocolFee",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -766,19 +705,12 @@
   },
   {
     "inputs": [],
-    "name": "repurposeRevenue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "securityFee",
+    "name": "revenue",
     "outputs": [
       {
-        "internalType": "uint16",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint16"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -859,8 +791,28 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_TokenLocker",
+        "type": "address"
+      }
+    ],
+    "name": "updateTokenLocker",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "withdrawLostBids",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawRevenue",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
