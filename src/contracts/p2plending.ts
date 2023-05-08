@@ -99,18 +99,16 @@ export function handleNewBid(event: BidOpenedEvent): void {
 }
 
 export function handleLostBid(event: LostBidEvent): void {
+  let bidder = event.params.bidder.toHexString();
   let entity = bid.load(
     event.params.id
       .toHexString()
       .concat("-")
-      .concat(event.params.bidder.toHexString())
+      .concat(bidder)
   );
-  let _accountEntity = account.load(event.params.bidder.toHexString());
-  if (_accountEntity == null) {
-    _accountEntity = fetchAccount(event.params.bidder);
-    _accountEntity.withdrawableBid.plus(event.params.amount);
-    _accountEntity.save();
-  }
+  let _accountEntity = fetchAccount(event.params.bidder);
+  _accountEntity.withdrawableBid.plus(event.params.amount);
+  _accountEntity.save();
   if (entity != null) {
     entity.status = "REJECTED";
     entity.save();

@@ -103,7 +103,7 @@ export function fetchAccount(address: Address): account {
   let addressAccount = address.toHexString();
   let accountEntity = account.load(addressAccount);
 
-  if (accountEntity == null && addressAccount != constants.ADDRESS_ZERO) {
+  if (accountEntity == null) {
     accountEntity = new account(addressAccount);
     accountEntity.withdrawableBid = constants.BIGINT_ZERO;
     accountEntity.revenue = constants.BIGINT_ZERO;
