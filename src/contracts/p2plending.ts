@@ -106,9 +106,15 @@ export function handleLostBid(event: LostBidEvent): void {
       .concat("-")
       .concat(bidder)
   );
-  let _accountEntity = fetchAccount(event.params.bidder);
-  _accountEntity.withdrawableBid.plus(event.params.amount);
-  _accountEntity.save();
+  // let accountEntity = account.load(bidder);
+  // if (accountEntity == null) {
+  //   accountEntity = new account(bidder);
+  //   accountEntity.withdrawableBid = constants.BIGINT_ZERO;
+  // }
+  // if (accountEntity.withdrawableBid != null) {
+  //   accountEntity.withdrawableBid.plus(event.params.amount);
+  // }
+  // accountEntity.save();
   if (entity != null) {
     entity.status = "REJECTED";
     entity.save();

@@ -7,7 +7,7 @@ dataSources:
     network: mumbai
     source:
       abi: IERC721
-      startBlock: 35260180
+      startBlock: 35276820
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,14 +33,14 @@ dataSources:
     source:
       address: "0x9628c124241d55a27e0a6a29ddd7f42df629b6d9"
       abi: Main
-      startBlock: 35260180
+      startBlock: 35276820
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - SupportedCollection
-        - Protocol
+        - protocol
       abis:
         - name: Main
           file: ./abis/Main.json
@@ -58,7 +58,7 @@ dataSources:
     source:
       address: "0x7349153dff33f393b619236e1bf63edd5e22a553"
       abi: TokenLocker
-      startBlock: 35260180
+      startBlock: 35276820
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -82,14 +82,14 @@ dataSources:
     source:
       address: "0xd5a4d38578bf1ac82535752028c20a985f206a6f"
       abi: P2PLending
-      startBlock: 35260180
+      startBlock: 35276820
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - p2pContract
-        - p2pBid
+        - loanContract
+        - bid
       abis:
         - name: P2PLending
           file: ./abis/P2PLending.json

@@ -52,7 +52,7 @@ type account @entity {
   accountCollection: [accountCollection!] @derivedFrom(field: "account")
 
   " withdrawable bids from failed bid "
-  withdrawableBid: BigInt!
+  withdrawableBid: BigInt
 
   " locked nfts "
   lockedIds: [lockId!] @derivedFrom(field: "depositor")
