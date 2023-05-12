@@ -39,9 +39,6 @@ type account @entity {
   " The NFTs owned by this account "
   tokens: [token!]! @derivedFrom(field: "owner")
 
-  " The total revenue generated for this account "
-  revenue: BigInt
-
   " The transfers originating from this account "
   transfersFrom: [transfer!] @derivedFrom(field: "senderAddress")
 
@@ -50,9 +47,6 @@ type account @entity {
 
   " M:M relationship for Accounts and Collections "
   accountCollection: [accountCollection!] @derivedFrom(field: "account")
-
-  " withdrawable bids from failed bid "
-  withdrawableBid: BigInt
 
   " locked nfts "
   lockedIds: [lockId!] @derivedFrom(field: "depositor")
@@ -65,6 +59,20 @@ type account @entity {
 
   " loanContract as a lender "
   lends: [loanContract!] @derivedFrom(field: "lender")
+
+  " revenue and assets of account "
+  revenue: accountRevenue @derivedFrom(field: "account")
+}
+
+type accountRevenue @entity {
+  " A coalition of account address - revenue "
+  id: ID!
+
+  " withdrawable bids from failed bids "
+  withdrawableBid: BigInt!
+
+  " account that has the set revenue "
+  account: account
 }
 
 type collection @entity {
@@ -251,7 +259,7 @@ type loanContract @entity {
   expiry: BigInt!
 
   " The start block of the loan "
-  checkPointBlock: BigInt!
+  checkPointBlock: BigInt
 
   " state of the loan "
   status: LoanStatus!

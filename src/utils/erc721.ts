@@ -4,7 +4,13 @@ import { IERC721Metadata } from "../../generated/IERC721/IERC721Metadata";
 
 import { Contract721 } from "../../generated/IERC721/Contract721";
 
-import { account, collection, contract, token } from "../../generated/schema";
+import {
+  account,
+  accountRevenue,
+  collection,
+  contract,
+  token,
+} from "../../generated/schema";
 
 import { supportsInterface } from "./erc165";
 
@@ -91,10 +97,18 @@ export function fetchAccount(address: Address): account {
 
   if (accountEntity == null && addressAccount != constants.ADDRESS_ZERO) {
     accountEntity = new account(addressAccount);
-    accountEntity.withdrawableBid = constants.BIGINT_ZERO;
-    accountEntity.revenue = constants.BIGINT_ZERO;
 
     accountEntity.save();
   }
   return accountEntity as account;
+}
+
+export function setAccountRevenue(addressId: string): accountRevenue {
+  let revAccountEntity = accountRevenue.load("revenue - ".concat(addressId));
+  if (revAccountEntity == null) {
+    revAccountEntity = new accountRevenue("revenue - ".concat(addressId));
+    revAccountEntity.withdrawableBid = constants.BIGINT_ZERO;
+    revAccountEntity.account = addressId;
+  }
+  return revAccountEntity as accountRevenue;
 }

@@ -11,16 +11,14 @@ import {
 } from "../../generated/P2PLending/P2PLending";
 import { constants, transactions } from "../graphprotcol-utls";
 import { updateProtocol } from "./main";
-import { fetchAccount } from "../utils/erc721";
+import { fetchAccount, setAccountRevenue } from "../utils/erc721";
 
 export function handleContractOpened(event: ContractOpenedEvent): void {
   let entity = new loanContract(event.params.id.toHexString());
   entity.borrower = event.params.borrower.toHexString();
-  entity.lender = constants.ADDRESS_ZERO;
   entity.amount = event.params.amount;
   entity.interest = event.params.interest;
   entity.status = "PENDING";
-  entity.lockId = event.params.lockId.toHexString();
   entity.expiry = event.params.expiry;
   entity.transaction = transactions.log(event).id;
   let tokenLockerEntity = lockId.load(event.params.lockId.toHexString());
@@ -106,15 +104,11 @@ export function handleLostBid(event: LostBidEvent): void {
       .concat("-")
       .concat(bidder)
   );
-  // let accountEntity = account.load(bidder);
-  // if (accountEntity == null) {
-  //   accountEntity = new account(bidder);
-  //   accountEntity.withdrawableBid = constants.BIGINT_ZERO;
-  // }
-  // if (accountEntity.withdrawableBid != null) {
-  //   accountEntity.withdrawableBid.plus(event.params.amount);
-  // }
-  // accountEntity.save();
+  let revenueAccount = setAccountRevenue(bidder);
+  revenueAccount.withdrawableBid = revenueAccount.withdrawableBid.plus(
+    event.params.amount
+  );
+  revenueAccount.save();
   if (entity != null) {
     entity.status = "REJECTED";
     entity.save();
