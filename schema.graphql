@@ -118,7 +118,7 @@ type token @entity {
   tokenURI: String!
 
   " The token metadata "
-  metadata: TokenMetadata!
+  metadata: TokenMetadata
 
   " Used to track last fetched time for token metadata "
   updatedAtTimestamp: BigInt!
@@ -336,5 +336,5 @@ type _Schema_
     name: "accountSearch"
     language: en
     algorithm: rank
-    include: [{ entity: "account", fields: [{ name: "id" }] }]
+    include: [{ entity: "TokenMetadata", fields: [{ name: "name" }] }]
   )
