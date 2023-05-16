@@ -94,7 +94,7 @@ export function handleTransfer(event: TransferEvent): void {
     transferEntity.timestamp = event.block.timestamp.toI32();
     transferEntity.save();
 
-    let tx = transaction.load(event.transaction.hash);
+    let tx = transaction.load(event.transaction.hash.toHexString());
     if (tx != null) {
       let transferArray = tx.transfers;
       transferArray.push(transferEntity.id);

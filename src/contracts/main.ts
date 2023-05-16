@@ -1,4 +1,4 @@
-import { BigInt, store, log, Address } from "@graphprotocol/graph-ts";
+import { BigInt, store, Address } from "@graphprotocol/graph-ts";
 import {
   CollectionAdded as CollectionAddedEvent,
   CollectionRemoved as CollectionRemovedEvent,

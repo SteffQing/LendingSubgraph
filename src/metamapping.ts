@@ -34,13 +34,15 @@ function setAttributes(attributeArray: JSONValue[], id: Bytes): string[] {
     let try_traitType = attributeObject.get("trait_type");
     if (try_traitType == null) {
       try_traitType = attributeObject.get("traitType");
-    }
-    if (try_traitType == null) {
-      try_traitType = attributeObject.get("trait-type");
+      if (try_traitType == null) {
+        try_traitType = attributeObject.get("trait-type");
+      }
     }
     let try_value = attributeObject.get("value");
     if (try_value !== null && try_traitType !== null) {
-      let tokenAttributeEntity = new TokenAttribute(id.toHexString());
+      let tokenAttributeEntity = new TokenAttribute(
+        id.toHexString().concat(i.toString())
+      );
       tokenAttributeEntity.traitType = try_traitType.toString();
       tokenAttributeEntity.value = try_value.toString();
       tokenAttributeEntity.save();

@@ -37,7 +37,7 @@ type account @entity {
   id: Bytes!
 
   " The NFTs owned by this account "
-  tokens: [token!]! @derivedFrom(field: "owner")
+  tokens: [token!] @derivedFrom(field: "owner")
 
   " The transfers originating from this account "
   transfersFrom: [transfer!] @derivedFrom(field: "senderAddress")
@@ -180,7 +180,7 @@ type accountCollection @entity {
 
 type transaction @entity {
   " the hash of the tx"
-  id: Bytes!
+  id: ID!
 
   " Timestamp for block "
   timestamp: Int!
@@ -249,7 +249,7 @@ type protocol @entity {
 
 type lockId @entity {
   " The lock id in bytes "
-  id: Bytes!
+  id: ID!
 
   " The array of collections that are locked "
   collection: collection!
@@ -278,7 +278,7 @@ type lockId @entity {
 
 type loanContract @entity {
   " the loanContract id in bytes"
-  id: Bytes!
+  id: ID!
 
   " The borrower address "
   borrower: account!

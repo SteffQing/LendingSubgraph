@@ -25,12 +25,11 @@ export namespace constants {
   export const TokenLocker = "0xf07d62d2ae1264e9ac587aa6b40fb4650effc191";
   export const P2P = "0x6ea22ef2910b73fe64dbb8166892d20bc26eecbb";
 }
-
 export namespace transactions {
   export function log(event: ethereum.Event): transaction {
-    let tx = transaction.load(event.transaction.hash);
+    let tx = transaction.load(event.transaction.hash.toHexString());
     if (!tx) {
-      tx = new transaction(event.transaction.hash);
+      tx = new transaction(event.transaction.hash.toHexString());
       tx.timestamp = event.block.timestamp.toI32();
       tx.blockNumber = event.block.number.toI32();
       tx.gasPrice = event.transaction.gasPrice;

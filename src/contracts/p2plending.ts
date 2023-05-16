@@ -9,32 +9,30 @@ import {
   BidOpened as BidOpenedEvent,
   BidClosed as BidClosedEvent,
   UpdateProtocolFees as UpdateProtocolFeesEvent,
-  UpdateProtocolBorrowParameters as UpdateProtocolBorrowParametersEvent,
-  UpdateProtocolDateParameters as UpdateProtocolDateParametersEvent,
 } from "../../generated/P2PLending/P2PLending";
 import { constants, transactions } from "../graphprotcol-utls";
 import { updateProtocol, updateProtocolParameters } from "./main";
-import { fetchAccount, setAccountRevenue } from "../utils/erc721";
+import { setAccountRevenue } from "../utils/erc721";
 import { Address } from "@graphprotocol/graph-ts";
 
 export function handleContractOpened(event: ContractOpenedEvent): void {
-  let entity = new loanContract(event.params.id);
+  let entity = new loanContract(event.params.id.toHexString());
   entity.borrower = event.params.borrower;
   entity.amount = event.params.amount;
   entity.interest = event.params.interest;
   entity.status = "PENDING";
   entity.expiry = event.params.expiry;
   entity.transaction = transactions.log(event).id;
-  let tokenLockerEntity = lockId.load(event.params.lockId);
+  let tokenLockerEntity = lockId.load(event.params.lockId.toHexString());
   if (tokenLockerEntity != null) {
-    tokenLockerEntity.contract = event.params.id;
+    tokenLockerEntity.contract = event.params.id.toHexString();
     tokenLockerEntity.save();
   }
   entity.save();
 }
 
 export function handleContractActive(event: ContractActiveEvent): void {
-  let entity = loanContract.load(event.params.id);
+  let entity = loanContract.load(event.params.id.toHexString());
   if (entity != null) {
     entity.lender = event.params.lender;
     entity.status = "ACTIVE";
@@ -61,7 +59,7 @@ export function handleContractActive(event: ContractActiveEvent): void {
 }
 
 export function handleContractClosed(event: ContractClosedEvent): void {
-  let entity = loanContract.load(event.params.id);
+  let entity = loanContract.load(event.params.id.toHexString());
   if (entity != null) {
     entity.status = "CLOSED";
     entity.save();
@@ -69,7 +67,7 @@ export function handleContractClosed(event: ContractClosedEvent): void {
 }
 
 export function handleLiquidation(event: LiquidateEvent): void {
-  let entity = loanContract.load(event.params.id);
+  let entity = loanContract.load(event.params.id.toHexString());
   if (entity != null) {
     entity.status = "LIQUIDATED";
     entity.save();
@@ -77,7 +75,7 @@ export function handleLiquidation(event: LiquidateEvent): void {
 }
 
 export function handleLoansRepaid(event: LoanRepaidEvent): void {
-  let entity = loanContract.load(event.params.id);
+  let entity = loanContract.load(event.params.id.toHexString());
   if (entity != null) {
     entity.status = "LOAN_REPAID";
     updateProtocol(
@@ -99,7 +97,7 @@ export function handleNewBid(event: BidOpenedEvent): void {
   entity.bidder = event.params.bidder;
   entity.proposedInterest = event.params.proposedInterest;
   entity.transaction = transactions.log(event).id;
-  entity.contract = event.params.id;
+  entity.contract = event.params.id.toHexString();
   entity.status = "PENDING";
   entity.save();
 }
