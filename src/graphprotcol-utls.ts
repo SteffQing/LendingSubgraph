@@ -20,17 +20,17 @@ export namespace constants {
   export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
   export const BYTES32_ZERO =
     "0x0000000000000000000000000000000000000000000000000000000000000000";
-  export const WETH = "0x69567cffe9918dbef4cd24b30fddce4c13389dcf";
-  export const Main = "0x9628c124241d55a27e0a6a29ddd7f42df629b6d9";
-  export const TokenLocker = "0x7349153dff33f393b619236e1bf63edd5e22a553";
-  export const P2P = "0xd5a4d38578bf1ac82535752028c20a985f206a6f";
+  export const WETH = "0xd7f7c6465940cb246b43f4a09936b76a1e7e4409";
+  export const Main = "0x6594ff275aa441304e039450f1fdbb30d1d9df33";
+  export const TokenLocker = "0xf07d62d2ae1264e9ac587aa6b40fb4650effc191";
+  export const P2P = "0x6ea22ef2910b73fe64dbb8166892d20bc26eecbb";
 }
 
 export namespace transactions {
   export function log(event: ethereum.Event): transaction {
-    let tx = transaction.load(event.transaction.hash.toHexString());
+    let tx = transaction.load(event.transaction.hash);
     if (!tx) {
-      tx = new transaction(event.transaction.hash.toHexString());
+      tx = new transaction(event.transaction.hash);
       tx.timestamp = event.block.timestamp.toI32();
       tx.blockNumber = event.block.number.toI32();
       tx.gasPrice = event.transaction.gasPrice;

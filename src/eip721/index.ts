@@ -19,22 +19,23 @@ export function handleTransfer(event: TransferEvent): void {
     let timestampBigInt = BigInt.fromI32(event.block.timestamp.toI32());
     let token = fetchToken(collection, event.params.tokenId, timestampBigInt);
 
-    let senderAddress = account.load(event.params.from.toHexString());
+    let senderAddress = account.load(event.params.from);
     if (!senderAddress) {
       senderAddress = fetchAccount(event.params.from);
     }
 
-    let receiverAddress = account.load(event.params.to.toHexString());
+    let receiverAddress = account.load(event.params.to);
     if (!receiverAddress) {
       receiverAddress = fetchAccount(event.params.to);
     }
 
     let senderAccountCollection = accountCollection.load(
-      senderAddress.id + "-" + collection.id
+      senderAddress.id.toHexString() + "-" + collection.id.toHexString()
     );
     if (
       senderAccountCollection &&
-      senderAddress.id != "0x0000000000000000000000000000000000000000"
+      senderAddress.id.toHexString() !=
+        "0x0000000000000000000000000000000000000000"
     ) {
       let senderTokenCountNew = senderAccountCollection.tokenCount - 1;
 
@@ -44,17 +45,18 @@ export function handleTransfer(event: TransferEvent): void {
       if (senderAccountCollection.tokenCount == 0) {
         store.remove(
           "accountCollection",
-          senderAddress.id + "-" + collection.id
+          senderAddress.id.toHexString() + "-" + collection.id.toHexString()
         );
       }
     }
 
     let receiverAccountCollection = accountCollection.load(
-      receiverAddress.id + "-" + collection.id
+      receiverAddress.id.toHexString() + "-" + collection.id.toHexString()
     );
     if (
       receiverAccountCollection &&
-      receiverAddress.id != "0x0000000000000000000000000000000000000000"
+      receiverAddress.id.toHexString() !=
+        "0x0000000000000000000000000000000000000000"
     ) {
       let receiverTokenCountNew = receiverAccountCollection.tokenCount + 1;
 
@@ -63,10 +65,11 @@ export function handleTransfer(event: TransferEvent): void {
     }
     if (
       !receiverAccountCollection &&
-      receiverAddress.id != "0x0000000000000000000000000000000000000000"
+      receiverAddress.id.toHexString() !=
+        "0x0000000000000000000000000000000000000000"
     ) {
       receiverAccountCollection = new accountCollection(
-        receiverAddress.id + "-" + collection.id
+        receiverAddress.id.toHexString() + "-" + collection.id.toHexString()
       );
       receiverAccountCollection.account = receiverAddress.id;
       receiverAccountCollection.collection = collection.id;
@@ -91,7 +94,7 @@ export function handleTransfer(event: TransferEvent): void {
     transferEntity.timestamp = event.block.timestamp.toI32();
     transferEntity.save();
 
-    let tx = transaction.load(event.transaction.hash.toHexString());
+    let tx = transaction.load(event.transaction.hash);
     if (tx != null) {
       let transferArray = tx.transfers;
       transferArray.push(transferEntity.id);

@@ -28,13 +28,13 @@ type SupportedCollection @entity {
 }
 
 type contract @entity {
-  id: ID!
+  id: Bytes!
   asERC721: collection
 }
 
 type account @entity {
   " the wallet address "
-  id: ID!
+  id: Bytes!
 
   " The NFTs owned by this account "
   tokens: [token!]! @derivedFrom(field: "owner")
@@ -65,8 +65,8 @@ type account @entity {
 }
 
 type accountRevenue @entity {
-  " A coalition of account address - revenue "
-  id: ID!
+  " account address "
+  id: Bytes!
 
   " withdrawable bids from failed bids "
   withdrawableBid: BigInt!
@@ -77,7 +77,7 @@ type accountRevenue @entity {
 
 type collection @entity {
   " The address of the collection "
-  id: ID!
+  id: Bytes!
 
   " The name of the collection "
   name: String
@@ -90,6 +90,9 @@ type collection @entity {
 
   " Mint Price "
   mintPrice: BigDecimal
+
+  " Collection creator "
+  creator: account
 
   " Tokens for the collection"
   tokens: [token!]! @derivedFrom(field: "collection")
@@ -114,6 +117,9 @@ type token @entity {
   " The token URI "
   tokenURI: String!
 
+  " The token metadata "
+  metadata: TokenMetadata!
+
   " Used to track last fetched time for token metadata "
   updatedAtTimestamp: BigInt!
 
@@ -125,6 +131,37 @@ type token @entity {
 
   " Transfers involving this token "
   transfers: [transfer!]! @derivedFrom(field: "token")
+}
+
+type TokenMetadata @entity {
+  " metadata hash "
+  id: ID!
+
+  " The image of the NFT"
+  image: String!
+
+  " The name of the NFT"
+  name: String!
+
+  " The description of the NFT"
+  description: String!
+
+  " The token attributes "
+  attributes: [TokenAttribute!] @derivedFrom(field: "metadata")
+}
+
+type TokenAttribute @entity {
+  " the metadata for token "
+  id: ID!
+
+  " the metadata for token "
+  metadata: TokenMetadata!
+
+  " The attribute trait type "
+  traitType: String!
+
+  " The attribute value "
+  value: String!
 }
 
 type accountCollection @entity {
@@ -143,7 +180,7 @@ type accountCollection @entity {
 
 type transaction @entity {
   " the hash of the tx"
-  id: ID!
+  id: Bytes!
 
   " Timestamp for block "
   timestamp: Int!
@@ -189,7 +226,7 @@ type transfer @entity {
 
 type protocol @entity {
   " The protocol contract address "
-  id: ID!
+  id: Bytes!
 
   " The protocol name "
   name: String!
@@ -212,7 +249,7 @@ type protocol @entity {
 
 type lockId @entity {
   " The lock id in bytes "
-  id: ID!
+  id: Bytes!
 
   " The array of collections that are locked "
   collection: collection!
@@ -241,7 +278,7 @@ type lockId @entity {
 
 type loanContract @entity {
   " the loanContract id in bytes"
-  id: ID!
+  id: Bytes!
 
   " The borrower address "
   borrower: account!

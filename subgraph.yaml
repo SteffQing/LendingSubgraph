@@ -7,7 +7,7 @@ dataSources:
     network: mumbai
     source:
       abi: IERC721
-      startBlock: 35276820
+      startBlock: 35661090
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -31,9 +31,9 @@ dataSources:
     name: MainContract
     network: mumbai
     source:
-      address: "0x9628c124241d55a27e0a6a29ddd7f42df629b6d9"
+      address: "0x6594ff275aa441304e039450f1fdbb30d1d9df33"
       abi: Main
-      startBlock: 35276820
+      startBlock: 35661090
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -56,9 +56,9 @@ dataSources:
     name: TokenLocker
     network: mumbai
     source:
-      address: "0x7349153dff33f393b619236e1bf63edd5e22a553"
+      address: "0xf07d62d2ae1264e9ac587aa6b40fb4650effc191"
       abi: TokenLocker
-      startBlock: 35276820
+      startBlock: 35661090
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -80,9 +80,9 @@ dataSources:
     name: P2PLending
     network: mumbai
     source:
-      address: "0xd5a4d38578bf1ac82535752028c20a985f206a6f"
+      address: "0x6ea22ef2910b73fe64dbb8166892d20bc26eecbb"
       abi: P2PLending
-      startBlock: 35276820
+      startBlock: 35661090
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -117,5 +117,18 @@ dataSources:
         - event: UpdateProtocolDateParameters(uint8,uint8)
           handler: handleProtocolDateParameters
       file: ./src/contracts/p2plending.ts
+templates:
+  - name: TokenMetadata
+    kind: file/ipfs
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/metamapping.ts
+      handler: handleMetadata
+      entities:
+        - TokenMetadata
+      abis:
+        - name: Contract721
+          file: ./abis/Contract721.json
 features:
   - fullTextSearch

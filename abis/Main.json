@@ -29,19 +29,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Paused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "protocol",
@@ -70,21 +57,12 @@
     "type": "event"
   },
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
         "internalType": "address",
-        "name": "account",
+        "name": "_collection",
         "type": "address"
       }
-    ],
-    "name": "Unpaused",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" }
     ],
     "name": "addCollection",
     "outputs": [],
@@ -93,10 +71,26 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_protocol", "type": "address" },
-      { "internalType": "string", "name": "_name", "type": "string" },
-      { "internalType": "uint8", "name": "_protocolFee", "type": "uint8" },
-      { "internalType": "uint8", "name": "_securityFee", "type": "uint8" }
+      {
+        "internalType": "address",
+        "name": "_protocol",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_protocolFee",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_securityFee",
+        "type": "uint8"
+      }
     ],
     "name": "addProtocol",
     "outputs": [],
@@ -106,16 +100,32 @@
   {
     "inputs": [],
     "name": "admin",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
     ],
     "name": "getCollection",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -133,15 +143,31 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "paused",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_caller",
+        "type": "address"
+      }
+    ],
+    "name": "isCallerAdmin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_collection", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_collection",
+        "type": "address"
+      }
     ],
     "name": "removeCollection",
     "outputs": [],

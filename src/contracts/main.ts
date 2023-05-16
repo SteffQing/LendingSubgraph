@@ -1,4 +1,4 @@
-import { BigInt, store, log } from "@graphprotocol/graph-ts";
+import { BigInt, store, log, Address } from "@graphprotocol/graph-ts";
 import {
   CollectionAdded as CollectionAddedEvent,
   CollectionRemoved as CollectionRemovedEvent,
@@ -11,7 +11,7 @@ export function handleCollectionAddition(event: CollectionAddedEvent): void {
   let collectionAddress = event.params._collection;
   let address = collectionAddress.toHexString();
   let entity = new SupportedCollection("nftLending/".concat(address));
-  entity.collection = address;
+  entity.collection = collectionAddress;
   entity.save();
 }
 export function handleCollectionRemoval(event: CollectionRemovedEvent): void {
@@ -24,7 +24,7 @@ export function handleCollectionRemoval(event: CollectionRemovedEvent): void {
 }
 
 export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
-  let _protocol = event.params.protocol.toHexString();
+  let _protocol = event.params.protocol;
   let entity = new protocol(_protocol);
   entity.name = event.params.name;
   entity.protocolFee = event.params.protocolFee;
@@ -35,7 +35,7 @@ export function handleProtocolCreation(event: ProtocolCreatedEvent): void {
 }
 
 export function updateProtocol(
-  _protocol: string,
+  _protocol: Address,
   borrow: BigInt,
   interest: BigInt
 ): void {
@@ -48,7 +48,7 @@ export function updateProtocol(
 }
 
 export function updateProtocolParameters(
-  _protocol: string,
+  _protocol: Address,
   securityFee: number,
   protocolFee: number
 ): void {

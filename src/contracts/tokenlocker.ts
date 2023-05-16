@@ -8,10 +8,10 @@ import { lockId } from "../../generated/schema";
 import { transactions } from "../graphprotcol-utls";
 
 export function handleDeposit(event: DepositEvent): void {
-  let entity = new lockId(event.params.lockId.toHexString());
-  entity.depositor = event.params.user.toHexString();
-  entity.protocol = event.params.protocol.toHexString();
-  entity.collection = event.params.collection.toHexString();
+  let entity = new lockId(event.params.lockId);
+  entity.depositor = event.params.user;
+  entity.protocol = event.params.protocol;
+  entity.collection = event.params.collection;
   entity.expires = event.params.lockPeriod;
   entity.status = "ACTIVE";
   let _lockedTokens = loopCollection(
@@ -35,7 +35,7 @@ export function loopCollection(collection: string, tokens: BigInt[]): string[] {
 }
 
 export function handleWithdrawal(event: WithdrawEvent): void {
-  let entity = lockId.load(event.params.lockId.toHexString());
+  let entity = lockId.load(event.params.lockId);
   if (entity) {
     entity.status = "UNLOCKED";
     entity.save();
@@ -43,10 +43,10 @@ export function handleWithdrawal(event: WithdrawEvent): void {
 }
 
 export function handleLiquidation(event: LiquidateEvent): void {
-  let entity = lockId.load(event.params.lockId.toHexString());
+  let entity = lockId.load(event.params.lockId);
   if (entity) {
     entity.status = "LIQUIDATED";
-    entity.depositor = event.params.recipient.toHexString();
+    entity.depositor = event.params.recipient;
     entity.save();
   }
 }
