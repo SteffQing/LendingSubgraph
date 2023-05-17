@@ -138,13 +138,13 @@ type TokenMetadata @entity {
   id: ID!
 
   " The image of the NFT"
-  image: String!
+  image: String
 
   " The name of the NFT"
-  name: String!
+  name: String
 
   " The description of the NFT"
-  description: String!
+  description: String
 
   " The token attributes "
   attributes: [TokenAttribute!] @derivedFrom(field: "metadata")
@@ -158,10 +158,10 @@ type TokenAttribute @entity {
   metadata: TokenMetadata!
 
   " The attribute trait type "
-  traitType: String!
+  traitType: String
 
   " The attribute value "
-  value: String!
+  value: String
 }
 
 type accountCollection @entity {
