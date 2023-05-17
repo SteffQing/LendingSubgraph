@@ -131,15 +131,19 @@ export function setAccountRevenue(address: Address): accountRevenue {
 }
 
 function checkUri(url: string): string {
-  if (url.length === 46) {
-    let startingIndex = url.indexOf("Qm");
-    let ipfsHash = url.substring(startingIndex, startingIndex + 46);
-    return ipfsHash;
-  } else if (url.length === 59) {
-    let startingIndex = url.indexOf("bafy");
-    let ipfsHash = url.substring(startingIndex, startingIndex + 59);
-    return ipfsHash;
+  let ipfsHash: string;
+  if (url.length >= 46) {
+    if (url.includes("Qm")) {
+      let startingIndex = url.indexOf("Qm");
+      ipfsHash = url.substring(startingIndex, startingIndex + 46);
+    } else if (url.includes("bafy")) {
+      let startingIndex = url.indexOf("bafy");
+      ipfsHash = url.substring(startingIndex, startingIndex + 59);
+    } else {
+      ipfsHash = "";
+    }
   } else {
-    return "";
+    ipfsHash = "";
   }
+  return ipfsHash;
 }

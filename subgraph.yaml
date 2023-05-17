@@ -127,6 +127,7 @@ templates:
       handler: handleMetadata
       entities:
         - TokenMetadata
+        - TokenAttribute
       abis:
         - name: Contract721
           file: ./abis/Contract721.json

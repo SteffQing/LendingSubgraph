@@ -1,4 +1,10 @@
-import { json, Bytes, dataSource, JSONValue } from "@graphprotocol/graph-ts";
+import {
+  json,
+  Bytes,
+  dataSource,
+  JSONValue,
+  log,
+} from "@graphprotocol/graph-ts";
 import { TokenAttribute, TokenMetadata } from "../generated/schema";
 
 export function handleMetadata(content: Bytes): void {
@@ -18,16 +24,14 @@ export function handleMetadata(content: Bytes): void {
     const attributes = value.get("attributes");
     if (attributes) {
       let attributeArray = attributes.toArray();
-      let attributeStringArray = setAttributes(attributeArray, content);
-      tokenMetadata.attributes = attributeStringArray;
+      setAttributes(attributeArray, tokenMetadata.id);
     }
 
     tokenMetadata.save();
   }
 }
 
-function setAttributes(attributeArray: JSONValue[], id: Bytes): string[] {
-  let idArray: string[] = [];
+function setAttributes(attributeArray: JSONValue[], id: string): void {
   for (let i = 0; i < attributeArray.length; i++) {
     let attribute = attributeArray[i];
     let attributeObject = attribute.toObject();
@@ -40,14 +44,12 @@ function setAttributes(attributeArray: JSONValue[], id: Bytes): string[] {
     }
     let try_value = attributeObject.get("value");
     if (try_value !== null && try_traitType !== null) {
-      let tokenAttributeEntity = new TokenAttribute(
-        id.toHexString().concat(i.toString())
-      );
+      let tokenAttributeEntityId = id.concat("-attribute").concat(i.toString());
+      let tokenAttributeEntity = new TokenAttribute(tokenAttributeEntityId);
       tokenAttributeEntity.traitType = try_traitType.toString();
       tokenAttributeEntity.value = try_value.toString();
+      tokenAttributeEntity.metadata = id;
       tokenAttributeEntity.save();
-      idArray.push(tokenAttributeEntity.id);
     }
   }
-  return idArray;
 }
