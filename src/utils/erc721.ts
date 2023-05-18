@@ -83,7 +83,6 @@ export function fetchToken(
 
     tokenEntity = new token(tokenid);
     tokenEntity.collection = collection.id;
-    tokenEntity.identifier = id;
     tokenEntity.tokenId = id.toString();
 
     //update collection's total supply
@@ -96,7 +95,10 @@ export function fetchToken(
     collection.totalSupply = try_totalSupply.reverted
       ? BigInt.fromI32(0)
       : try_totalSupply.value;
-    if (tokenURI.reverted == false) {
+    let isCollectionSupported = constants.Collections.includes(
+      collection.id.toHexString()
+    );
+    if (isCollectionSupported && tokenURI.reverted == false) {
       const tokenIpfsHash = tokenURI.value;
       let ipfsHash = checkUri(tokenIpfsHash);
       if (ipfsHash.length > 0) {

@@ -24,6 +24,7 @@ export namespace constants {
   export const Main = "0x6594ff275aa441304e039450f1fdbb30d1d9df33";
   export const TokenLocker = "0xf07d62d2ae1264e9ac587aa6b40fb4650effc191";
   export const P2P = "0x6ea22ef2910b73fe64dbb8166892d20bc26eecbb";
+  export const Collections = ["0x7257141509fed979fa2e97c7de475ab708eeda34"];
 }
 export namespace transactions {
   export function log(event: ethereum.Event): transaction {

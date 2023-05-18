@@ -111,9 +111,6 @@ type token @entity {
   " The collection address "
   collection: collection!
 
-  " The id of the NFT"
-  identifier: BigInt!
-
   " The token URI "
   tokenURI: String!
 
